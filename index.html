@@ -214,7 +214,7 @@ textarea.control { min-height: 132px; resize: vertical; direction: ltr; text-ali
 .side { display: none; }
 .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .tabs {
-  position: fixed; inset-inline: 0; bottom: 0; z-index: 20; display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px;
+  position: fixed; inset-inline: 0; bottom: 0; z-index: 20; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px;
   background: var(--surface); border-top: 1px solid var(--line);
   padding-top: 6px; padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px));
   padding-left: max(12px, env(safe-area-inset-left, 0px)); padding-right: max(12px, env(safe-area-inset-right, 0px));
@@ -223,7 +223,8 @@ textarea.control { min-height: 132px; resize: vertical; direction: ltr; text-ali
   display: flex; align-items: center; gap: 10px; border: 0; background: transparent; cursor: pointer; text-align: start;
   border-radius: 12px; padding: 10px 14px; color: var(--muted); font-weight: 500;
 }
-.tabs .nav-item { flex-direction: column; gap: 2px; padding: 6px 2px; font-size: 11.5px; text-align: center; min-width: 0; }
+.tabs .nav-item { flex-direction: column; justify-content: center; gap: 4px; width: 100%; height: 60px; padding: 4px 2px; font-size: 12px; line-height: 1.3; text-align: center; min-width: 0; border-radius: 14px; }
+.tabs .nav-item svg { width: 22px; height: 22px; flex: 0 0 22px; }
 .nav-item:hover { background: var(--soft); }
 .nav-item[aria-current="page"] { color: var(--fg); background: var(--soft); font-weight: 700; }
 .nav-item[aria-current="page"] svg { color: var(--gold-ink); }
@@ -294,6 +295,10 @@ textarea.control { min-height: 132px; resize: vertical; direction: ltr; text-ali
 .seg { display: flex; gap: 6px; flex-wrap: wrap; }
 .seg button { border: 1px solid var(--line); background: transparent; border-radius: 10px; padding: 8px 14px; cursor: pointer; min-height: 40px; }
 .seg button[aria-pressed="true"] { background: var(--btn-bg); color: var(--btn-fg); border-color: var(--btn-bg); font-weight: 700; }
+/* Staff section tabs: every tab has the same width and height */
+.seg.tab-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; width: 100%; }
+.seg.tab-grid button { min-height: 44px; padding: 8px 6px; font-size: 14px; line-height: 1.4; text-align: center; border-radius: 12px; white-space: normal; width: 100%; }
+@media (min-width: 760px) { .seg.tab-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); } }
 /* ---------- staff & groups ---------- */
 .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .page-title { font-size: 22px; line-height: 1.4; }
@@ -448,23 +453,136 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
 .rs-head small { color: var(--muted, #5a6478); }
 .rs-table th, .rs-table td { white-space: nowrap; }
 .rs-note { margin-top: 10px; }
+.rs-foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-top: 12px; font-size: 12px; color: var(--muted); }
+.rs-sign { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 22px; font-size: 12px; color: var(--muted); }
+.dc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; margin-top: 10px; }
+.dc-card { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.dc-h { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; }
+.dc-h b { font-size: 14px; }
+.dc-h small { color: var(--muted); font-size: 12px; white-space: nowrap; }
+.dc-names { font-size: 13px; line-height: 1.7; }
+.dc-n { color: var(--muted); font-size: 11px; }
+.dc-short { box-shadow: inset 0 0 0 2px var(--danger); }
+.rs-group { display: flex; align-items: center; gap: 10px; margin: 18px 0 8px; font-size: 15px; }
+.rs-group .gc { min-height: 24px; margin-inline-end: 0; }
+.rs-group small { color: var(--muted); background: var(--soft); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; font-size: 12px; }
+.rs-chip { display: inline-block; min-width: 64px; border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.rs-stats .rs-tile { border-top: 3px solid var(--gold); }
+.rs-table td .rs-chip.k-leave { color: var(--muted); }
+.cg-table { table-layout: fixed; width: 100%; border-collapse: collapse; margin-top: 8px; }
+.cg-table th { background: var(--soft); color: var(--muted); font-size: 12px; padding: 6px; border: 1px solid var(--line); }
+.cg-table td.cg-cell { vertical-align: top; border: 1px solid var(--line); padding: 6px; min-height: 96px; height: 110px; font-size: 12px; line-height: 1.5; text-align: right; }
+.cg-table td.cg-empty { background: var(--soft); border: 1px solid var(--line); }
+.cg-table .cg-day { font-weight: 700; margin-bottom: 4px; }
+.cg-table .cg-blk { border-radius: 6px; padding: 2px 6px; margin-bottom: 3px; }
+.cg-table .cg-fri { background: var(--warn-bg); }
+.cg-table .cg-hol { background: var(--danger-bg); }
+.rs-head { background: linear-gradient(135deg, var(--soft), var(--surface)); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
+.rs-logo { display: inline-grid; place-items: center; width: 56px; height: 56px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 2px 8px rgba(0,0,0,.06); flex: none; }
+.rs-logo .clinic-img { width: 100%; height: 100%; object-fit: contain; border-radius: 12px; display: block; }
+.logo-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.logo-preview { width: 72px; height: 72px; border-radius: 18px; background: var(--soft); border: 1px solid var(--line); display: grid; place-items: center; overflow: hidden; flex: none; }
+.logo-preview img, .logo-preview svg { width: 100%; height: 100%; object-fit: contain; display: block; }
+.rs-logo svg { width: 36px; }
+.rs-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 12px; }
+.rs-tile { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; background: var(--soft); display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.rs-tile small { color: var(--muted); font-size: 12px; }
+.rs-tile b { font-size: 20px; font-variant-numeric: tabular-nums; }
+.rs-tile-wide { grid-column: span 2; }
+.rs-tile-wide b { font-size: 15px; white-space: normal; }
+.rs-table { border-radius: 12px; }
+.rs-table thead th { position: sticky; top: 0; z-index: 1; background: var(--soft); color: var(--muted); font-size: 12px; letter-spacing: .02em; }
+.rs-table tbody tr:nth-child(even) td, .rs-table tbody tr:nth-child(even) th { background: color-mix(in srgb, var(--soft) 55%, transparent); }
+.rs-table tbody tr:hover td, .rs-table tbody tr:hover th { background: color-mix(in srgb, var(--gold) 12%, transparent); }
+.rs-table tbody th { position: sticky; right: 0; background: var(--surface); z-index: 1; }
+.rs-table td { font-size: 13px; }
+.rs-table tbody tr:last-child td, .rs-table tbody tr:last-child th { border-bottom: 0; }
 @media print {
   body * { visibility: hidden !important; }
-  .report-sheet, .report-sheet * { visibility: visible !important; }
-  .report-sheet { position: absolute; inset: 0 auto auto 0; width: 100%; margin: 0; border: 0; box-shadow: none !important; background: #fff; color: #000; }
+  .rs-wrap, .rs-wrap * { visibility: visible !important; }
+  .rs-wrap { position: absolute; inset: 0 auto auto 0; width: 100%; }
+  .report-sheet { position: static; width: 100%; margin: 0; border: 0; box-shadow: none !important; background: #fff; color: #000; }
+  .report-sheet + .report-sheet { break-before: page; page-break-before: always; }
+  .cg-table { table-layout: fixed; width: 100%; border-collapse: collapse; }
+  .cg-table th { background: #1f3358; color: #fff; font-size: 8px; padding: 2px; }
+  .cg-table td.cg-cell { vertical-align: top; border: 1px solid #d5dbe6; padding: 2px 3px; height: 136px; font-size: 10.5px; line-height: 1.25; text-align: right; }
+  .cg-table td.cg-empty { background: #f4f6fa; border: 1px solid #e3e7ef; }
+  .cg-table .cg-day { font-weight: 700; font-size: 11px; margin-bottom: 1px; }
+  .cg-table .cg-blk { border-radius: 3px; padding: 2px 4px; margin-bottom: 2px; }
+  .cg-table .cg-blk b { margin-inline-end: 2px; }
+  .cg-table .cg-fri { background: #fff6e5; }
+  .cg-table .cg-hol { background: #fde8e6; }
+  /* Employee calendar: both halves of the month must fit on one printed page */
+  .report-sheet .emp-grid td.cg-cell { height: 58px; min-height: 0; padding: 2px 3px; }
+  .report-sheet .emp-grid .cg-day { margin-bottom: 0; }
+  .report-sheet .emp-grid .cg-blk { margin-bottom: 0; font-size: 9px; }
+  .report-sheet .emp-grid { break-inside: avoid; page-break-inside: avoid; }
   .fair-wrap { overflow: visible !important; }
-  .rs-table th, .rs-table td { white-space: normal; font-size: 10px; padding: 2px 4px; }
+  .rs-table th, .rs-table td { white-space: normal; font-size: 10px; padding: 3px 5px; }
+  .report-sheet, .report-sheet * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .report-sheet { color: #1b2433; }
+  .report-sheet .rs-head { background: #14213d; border: 0; border-radius: 0; color: #fff; padding: 12px 14px; margin: 0 0 10px; }
+  .report-sheet .rs-head small { color: #e6c36a; }
+  .report-sheet .rs-logo { background: #fff; border: 0; box-shadow: none; width: 48px; height: 48px; }
+  .report-sheet .rs-name { color: #fff; font-size: 17px; }
+  .report-sheet .rs-stats { gap: 6px; margin-bottom: 8px; }
+  .report-sheet .rs-tile { background: #f4f6fa; border: 1px solid #dfe3ec; padding: 6px 8px; border-radius: 8px; }
+  .report-sheet .rs-tile small { font-size: 9px; }
+  .report-sheet .rs-tile b { font-size: 13px; }
+  .report-sheet .rs-table { border-radius: 0; }
+  .report-sheet .rs-table thead th { background: #1f3358; color: #fff; position: static; }
+  .report-sheet .rs-table tbody tr:nth-child(even) td, .report-sheet .rs-table tbody tr:nth-child(even) th { background: #f3f5f9; }
+  .report-sheet .rs-table tbody th { background: #fff; font-weight: 700; color: #14213d; }
+  .report-sheet .rs-table tbody th { white-space: nowrap; min-width: 110px; }
+  .report-sheet .rs-table tbody tr { break-inside: avoid; }
+  .report-sheet { padding: 0 !important; }
+  .report-sheet .rs-head { padding: 6px 10px; margin-bottom: 6px; }
+  .report-sheet .rs-logo { width: 36px; height: 36px; }
+  .report-sheet .rs-name { font-size: 14px; }
+  .report-sheet .rs-stats { margin-bottom: 4px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .report-sheet .rs-tile { padding: 3px 6px; }
+  .report-sheet .rs-tile b { font-size: 11px; }
+  .report-sheet .rs-group { margin: 6px 0 2px; font-size: 11px; }
+  .report-sheet .rs-group .gc { min-height: 12px; }
+  .report-sheet .rs-table th, .report-sheet .rs-table td { padding: 1px 3px; font-size: 7.5px; line-height: 1.2; }
+  .report-sheet .rs-table tbody th { min-width: 0; }
+  .report-sheet .rs-chip { min-width: 0; padding: 0 3px; font-size: 7px; border-radius: 4px; }
+  .report-sheet .rs-foot { margin-top: 4px; padding-top: 2px; font-size: 7px; }
+  .report-sheet .rs-note { font-size: 7px; margin: 2px 0; }
+  .report-sheet .rs-table thead th { font-size: 7.5px; }
+  .report-sheet .rs-table thead { display: table-header-group; }
+  .report-sheet .rs-table { page-break-inside: auto; }
+  .report-sheet .rs-stats { display: none; }
+  .report-sheet .fair-wrap { margin-top: 0; border: 0; border-radius: 0; }
+  .report-sheet .rs-group { margin: 3px 0 1px; }
+  .report-sheet .rs-head { margin-bottom: 4px; }
+  .report-sheet .rs-table tbody tr:nth-child(even) td, .report-sheet .rs-table tbody tr:nth-child(even) th { background: #f5f7fb; }
+  @page { size: A4 landscape; margin: 6mm; }
+  .report-sheet .rs-table th, .report-sheet .rs-table td { font-size: 9.5px; padding: 3px 5px; line-height: 1.35; }
+  .report-sheet .rs-table thead th { font-size: 9px; }
+  .report-sheet .rs-name { font-size: 16px; }
+  .report-sheet .rs-head small { font-size: 11px; }
+  .report-sheet .rs-group { font-size: 13px; margin: 6px 0 3px; }
+  .report-sheet .rs-group small { font-size: 9px; }
+  .report-sheet .rs-grid td, .report-sheet .rs-grid th { font-size: 11px; min-width: 0; }
+  .report-sheet .rs-chip { font-size: 8px; }
+  .report-sheet .rs-foot { font-size: 9px; }
+  .report-sheet .rs-sign { font-size: 10px; }
+  .report-sheet .dc-card { font-size: 10px; }
+  .report-sheet .dc-h b { font-size: 11px; }
+  .report-sheet .rs-table thead { display: table-header-group; }
+  .report-sheet .rs-foot { display: flex; justify-content: space-between; border-top: 1px solid #dfe3ec; margin-top: 8px; padding-top: 6px; font-size: 9px; color: #5a6478; }
   @page { size: A4 landscape; margin: 10mm; }
 }
-.kb-wrap { display: flex; gap: 12px; overflow-x: auto; padding: 4px 2px 8px; }
-.kb-col { flex: 0 0 220px; min-width: 0; background: var(--soft); border: 1px solid var(--line); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+.kb-wrap { display: grid; grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr)); gap: 10px; padding: 4px 2px 2px; }
+.kb-col { min-width: 0; background: var(--soft); border: 1px solid var(--line); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
 .kb-head { display: flex; align-items: center; gap: 8px; font-size: 14px; }
 .kb-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--gold); flex: none; }
 .kb-card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; display: flex; flex-direction: column; gap: 6px; }
 .kb-card.is-short { border-color: var(--danger); background: var(--danger-bg); }
 .kb-top { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; flex-wrap: wrap; font-size: 13px; }
 .kb-top small { color: var(--muted); font-variant-numeric: tabular-nums; }
-.kb-people { display: flex; flex-wrap: wrap; gap: 4px; }
+.kb-people { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .kb-chip { font-size: 12px; background: var(--soft); border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; }
 .kb-count { font-size: 12px; color: var(--muted); }
 .kb-card.is-short .kb-count { color: var(--danger); font-weight: 700; }
@@ -484,6 +602,30 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
 .gc { display: inline-block; width: 4px; align-self: stretch; min-height: 28px; border-radius: 2px; background: var(--gc, var(--gold)); margin-inline-end: 6px; vertical-align: middle; }
 .roster tfoot td.f-bad { color: var(--danger); font-weight: 700; }
 .roster tfoot td.f-ok { color: var(--ok); }
+.roster { border-radius: 14px; }
+.roster thead th { padding: 8px 6px; }
+.roster thead th.is-today { box-shadow: inset 0 -3px 0 var(--gold); color: var(--ink, inherit); font-weight: 700; }
+.roster thead th small { font-size: 10px; letter-spacing: .04em; opacity: .8; }
+.roster td { padding: 5px; }
+.roster td .r-sel { border-radius: 8px; border-color: transparent; background-color: rgba(255,255,255,.55); text-align: center; text-align-last: center; }
+.roster td.k-morning .r-sel, .roster td.k-evening .r-sel, .roster td.k-night .r-sel, .roster td.k-relief .r-sel, .roster td.k-other .r-sel { background-color: rgba(255,255,255,.7); }
+.roster td.k-morning { box-shadow: inset 3px 0 0 #e0a23a; }
+.roster td.k-evening { box-shadow: inset 3px 0 0 #2f6fcb; }
+.roster td.k-night { box-shadow: inset 3px 0 0 #4f4fc4; }
+.roster td.k-relief { box-shadow: inset 3px 0 0 #1f7a52; }
+.roster td.k-leave { box-shadow: inset 3px 0 0 #7a7f92; }
+.roster td.k-empty { box-shadow: inset 0 0 0 1.5px var(--danger); }
+.roster tbody tr:hover td { background-color: color-mix(in srgb, var(--surface) 92%, var(--gold) 8%); }
+.roster tbody tr:hover td[class*="k-"] { filter: brightness(.97); }
+.roster .r-name { padding: 6px 10px; }
+.roster tbody .r-name { background: var(--surface); }
+.av { flex: none; display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--gc, var(--gold)); color: #fff; font-size: 11px; font-weight: 700; margin-inline-end: 8px; vertical-align: middle; }
+.roster .nm { display: inline-block; vertical-align: middle; }
+.roster tfoot th, .roster tfoot td { padding: 6px 4px; line-height: 1.5; }
+.roster tfoot td.f-bad { background: var(--danger-bg); border-radius: 6px; }
+.rs-legend .lg { display: inline-flex; align-items: center; gap: 6px; }
+.rs-legend .lg::before { content: ""; width: 10px; height: 10px; border-radius: 3px; background: var(--lg-c, var(--gold)); }
+.rs-legend .lg.k-morning { --lg-c: #e0a23a; } .rs-legend .lg.k-evening { --lg-c: #2f6fcb; } .rs-legend .lg.k-night { --lg-c: #4f4fc4; } .rs-legend .lg.k-relief { --lg-c: #1f7a52; } .rs-legend .lg.k-leave { --lg-c: #9aa0b2; }
 .dk-bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; justify-content: space-between; margin-bottom: 8px; }
 .dk-day { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: space-between; }
 .dk-nav { display: flex; align-items: center; gap: 6px; }
@@ -497,6 +639,64 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
 .dk-card.is-warn { border-color: var(--warn); background: var(--warn-bg); }
 .dk-name { font-weight: 600; font-size: 13px; }
 .dk-card small { color: var(--muted); font-size: 12px; }
+.dash { display: flex; flex-direction: column; gap: 12px; }
+.dash-hero { padding-block: 8px; }
+.dash-hero h1 { margin: 0; font-size: 20px; }
+.dash-hero { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.dash-hero .today { margin-inline-start: auto; }
+.dash-brand { display: flex; align-items: center; gap: 10px; }
+.dash-brand .rs-logo { width: 40px; height: 40px; border-radius: 12px; }
+.dash-brand .rs-logo svg { width: 28px; }
+.dash-brand small { display: block; color: var(--muted); font-size: 12px; }
+.dash-clinic { display: block; font-size: 16px; }
+.dash-main { display: flex; flex-direction: column; gap: 12px; }
+.dash-cal .card, .dash-board .card { margin: 0; }
+@media (min-width: 900px) {
+  .dash { height: calc(100vh - 56px); min-height: 560px; }
+  .dash-main { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.9fr); }
+  .dash-cal, .dash-board { min-height: 0; display: flex; flex-direction: column; }
+  .dash-cal > .card, .dash-board > .card { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
+  .dash-board .kb-wrap { flex: 1; min-height: 0; align-items: stretch; }
+  .dash-board .kb-col { overflow: hidden; }
+  .dash-board .kb-card { padding: 5px 7px; gap: 2px; }
+  .dash-board .kb-col { padding: 8px; gap: 6px; }
+  .dash-board .kb-head { font-size: 13px; }
+  .dash-board .kb-wrap { gap: 8px; }
+  .dash-board .kb-top { flex-wrap: nowrap; }
+  .dash-board .kb-top b { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dash-board .kb-top small { white-space: nowrap; flex: none; }
+}
+@media (max-width: 899px) {
+  .kb-wrap { grid-template-columns: minmax(0, 1fr); }
+}
+.roster-tools { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; align-items: stretch; }
+.roster-tools > .roster-date, .roster-tools > label.field { grid-column: 1 / -1; }
+.roster-tools > label.field > span, .roster-tools .roster-date > span { font-size: 12px; }
+.roster-tools .btn, .roster-tools .control, .roster-tools .roster-date button { min-height: 40px; font-size: 14px; border-radius: 10px; }
+.roster-tools .btn { padding: 0 10px; margin: 0; }
+.roster-tools .control { padding: 6px 10px; }
+.busy-card { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 44px 24px; text-align: center; }
+.busy-ring { width: 56px; height: 56px; border-radius: 50%; border: 5px solid var(--line); border-top-color: var(--gold); animation: busy-spin 0.9s linear infinite; }
+.busy-title { margin: 4px 0 0; font-size: 18px; }
+.busy-step { margin: 0; min-height: 1.5em; color: var(--fg); opacity: 0.75; transition: opacity 0.3s ease; }
+.busy-bar { position: relative; width: min(260px, 70%); height: 6px; border-radius: 6px; background: var(--soft); overflow: hidden; }
+.busy-bar i { position: absolute; top: 0; bottom: 0; width: 40%; background: linear-gradient(90deg, transparent, var(--gold), transparent); animation: busy-slide 1.2s ease-in-out infinite; }
+@keyframes busy-spin { to { transform: rotate(360deg); } }
+@keyframes busy-slide { from { inset-inline-start: -40%; } to { inset-inline-start: 100%; } }
+@media (prefers-reduced-motion: reduce) { .busy-ring, .busy-bar i { animation-duration: 3s; } }
+.busy-card { padding: 34px 20px; }
+.busy-rules { list-style: none; margin: 4px 0 0; padding: 0; width: min(360px, 100%); display: grid; gap: 6px; text-align: start; }
+.busy-rule { display: grid; grid-template-columns: 10px minmax(0, 1fr); column-gap: 10px; align-items: center; padding: 8px 12px; border-radius: 10px; background: var(--soft); font-size: 14px; }
+.busy-rule .busy-rule-name { grid-column: 2; font-weight: 700; }
+.busy-rule small { grid-column: 2; font-size: 12px; opacity: 0.75; }
+.busy-dot { grid-row: 1 / span 2; width: 10px; height: 10px; border-radius: 50%; background: var(--line); animation: busy-pulse 1s ease-in-out infinite; }
+.busy-rule.is-ok .busy-dot { background: var(--ok); animation: none; }
+.busy-rule.is-warn .busy-dot { background: var(--warn); animation: none; }
+.busy-rule.is-bad .busy-dot { background: var(--danger); animation: none; }
+.busy-rule.is-warn small { color: var(--warn); opacity: 1; }
+.busy-rule.is-bad small { color: var(--danger); opacity: 1; }
+.busy-rule.is-ok small { opacity: 0.9; }
+@keyframes busy-pulse { 50% { opacity: 0.3; } }
 </style>
 
 </head>
@@ -504,6 +704,342 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
 <div id="app" dir="rtl"><div class="splash">در حال بارگذاری…</div></div>
 <div id="picker-root" dir="rtl"></div>
 
+<script id="sched-engine">
+/* ===== موتور هوشمند برنامه‌ریزی شیفت =====
+   منطق خالص: بدون DOM و بدون ذخیره‌سازی. اپ و آزمون‌ها از همین بخش استفاده می‌کنند.
+   ctx = {
+     employees   [{id, groupId, active, equalShare, firstName, lastName}]
+     groups      [{id, name, shareEqual, minHours, maxHours}]
+     shifts      [{id, kind, name, start, end, days, groups, min, mode}]
+     patterns    {groupId: [shiftId, ...]}      (نبود کلید = همه‌ی شیفت‌های مجاز)
+     rules       [{id, type, kind, groupId, value, mode, enabled, label}]
+     assignments {dateKey: {employeeId: shiftId | leave}}   (generateMonth آن را تغییر می‌دهد)
+     locks       {monthKey: {...}}                  (ماه‌های تأییدشده‌ی مدیر)
+     today       dateKey
+     leave       مقدار مرخصی
+     cal         {idx(key), delta(key, d), dow(key), monthKeys(key), priorKeys(key), isOff(key)}
+   */
+  (function (root) {
+    "use strict";
+    var FA = "۰۱۲۳۴۵۶۷۸۹";
+    function fa(v) { return String(v).replace(/\d/g, function (d) { return FA[+d]; }); }
+    function hm(str) {
+      var p = String(str || "").split(":");
+      if (p.length !== 2 || !/^\d{1,2}$/.test(p[0]) || !/^\d{2}$/.test(p[1])) return null;
+      var h = +p[0], m = +p[1];
+      return h > 23 || m > 59 ? null : h * 60 + m;
+    }
+    // Start minute of the day and length of a shift (an end before the start means overnight).
+    function span(s) {
+      if (!s) return null;
+      var a = hm(s.start), b = hm(s.end);
+      if (a === null || b === null) return null;
+      return { a: a, mins: ((b - a + 1440) % 1440) || 1440 };
+    }
+    function byName(a, b) { return (a.lastName + a.firstName).localeCompare(b.lastName + b.firstName, "fa"); }
+    function fullName(e) { return e.firstName + " " + e.lastName; }
+    function shiftOf(ctx, sid) { return (ctx.shifts || []).filter(function (s) { return s.id === sid; })[0] || null; }
+    function groupOf(ctx, gid) { return (ctx.groups || []).filter(function (g) { return g.id === gid; })[0] || null; }
+    function groupName(ctx, gid) { var g = groupOf(ctx, gid); return g ? g.name : "بدون گروه"; }
+    function isWork(ctx, v) { return !!v && v !== ctx.leave && !!shiftOf(ctx, v); }
+    function kindOf(ctx, sid) { var s = shiftOf(ctx, sid); return s ? (s.kind || s.id) : ""; }
+    function shiftMins(ctx, sid) { var sp = span(shiftOf(ctx, sid)); return sp ? sp.mins : 0; }
+    function cell(ctx, key, eid) { var d = ctx.assignments[key]; return d ? (d[eid] || "") : ""; }
+    function rulesOf(ctx, type) { return (ctx.rules || []).filter(function (r) { return r.enabled && r.type === type; }); }
+    function hardOf(list) { return list.filter(function (v) { return v.rule.mode === "hard"; }); }
+    function shareOf(ctx, e) {
+      if (e.equalShare === "yes") return true;
+      if (e.equalShare === "no") return false;
+      var g = groupOf(ctx, e.groupId); return !g || g.shareEqual !== false;
+    }
+    // Start and end (absolute minutes) of a shift that begins on day index D.
+    function interval(ctx, sid, D) {
+      var sp = span(shiftOf(ctx, sid)), st = D * 1440 + sp.a;
+      return { st: st, en: st + sp.mins, kind: kindOf(ctx, sid) };
+    }
+    // Frozen = approved month (lock) or a day already past. Frozen days are never regenerated or edited.
+    // Without eid: only a locked month counts. With eid: a past day is also frozen for a person who already has a record on it.
+    function frozen(ctx, key, eid) {
+      var lk = ctx.locks && ctx.locks[key.slice(0, 7)];
+      if (lk) return true;
+      if (eid === undefined || !ctx.today || !(key < ctx.today)) return false;
+      return cell(ctx, key, eid) !== "";
+    }
+    // Allowed for an employee when the shift lists the group (or none) and the group pattern includes it.
+    function allowed(ctx, s, e) {
+      if (!s || !span(s)) return false;
+      if ((s.groups || []).length && s.groups.indexOf(e.groupId) < 0) return false;
+      var pat = (ctx.patterns || {})[e.groupId];
+      return pat === undefined || pat.indexOf(s.id) >= 0;
+    }
+    // Personal exemption: a range of days in which the employee may not work some shift kinds.
+    var EXEMPT_RULE = { id: "exempt", type: "exempt", label: "معافیت", mode: "hard", enabled: true };
+    function exemptOf(e, key, kind) {
+      var list = e.exemptions || [];
+      for (var i = 0; i < list.length; i++) {
+        var x = list[i];
+        if (!x.from || !x.to || key < x.from || key > x.to) continue;
+        if (x.kinds.indexOf("*") >= 0 || x.kinds.indexOf(kind) >= 0) return x;
+      }
+      return null;
+    }
+    // Every rule that would be broken if employee e works shift sid on day key.
+    // Neighbouring days are read from ctx.assignments, so the same check serves generation and manual edits.
+    function violations(ctx, e, key, sid) {
+      var out = [];
+      if (!isWork(ctx, sid)) return out;
+      var D = ctx.cal.idx(key), me = interval(ctx, sid, D), kind = me.kind;
+      var ex = exemptOf(e, key, kind);
+      if (ex) out.push({ rule: EXEMPT_RULE, text: "معاف از این شیفت است" + (ex.reason ? " (" + ex.reason + ")" : "") });
+      function at(d) { return cell(ctx, ctx.cal.delta(key, d), e.id); }
+      // 1) rest between two shifts
+      rulesOf(ctx, "restGap").forEach(function (r) {
+        [-1, 1].forEach(function (d) {
+          var nsid = at(d); if (!isWork(ctx, nsid)) return;
+          var nx = interval(ctx, nsid, D + d);
+          var gap = d < 0 ? me.st - nx.en : nx.st - me.en;
+          if (gap < r.value * 60) out.push({ rule: r, text: "استراحت " + fa(Math.max(0, Math.floor(gap / 60))) + " ساعت؛ حداقل " + fa(r.value) + " ساعت لازم است" });
+        });
+      });
+      // 2) a full day off after a night shift (the night ends the next morning)
+      rulesOf(ctx, "nightOff").forEach(function (r) {
+        var y = at(-1);
+        if (isWork(ctx, y) && kindOf(ctx, y) === "night") out.push({ rule: r, text: "بعد از شب باید یک روز کامل استراحت باشد" });
+        if (kind === "night" && isWork(ctx, at(1))) out.push({ rule: r, text: "شب است و روز بعد کار ثبت شده؛ بعد از شب باید یک روز کامل استراحت باشد" });
+      });
+      // 3) no evening shift followed by a morning shift
+      rulesOf(ctx, "eveMorn").forEach(function (r) {
+        if (kind === "morning" && isWork(ctx, at(-1)) && kindOf(ctx, at(-1)) === "evening") out.push({ rule: r, text: "عصر روز قبل و صبح امروز با هم مجاز نیست" });
+        if (kind === "evening" && isWork(ctx, at(1)) && kindOf(ctx, at(1)) === "morning") out.push({ rule: r, text: "عصر امروز و صبح روز بعد با هم مجاز نیست" });
+      });
+      // 4) longest run of consecutive days (optionally only one kind of shift)
+      rulesOf(ctx, "maxRun").forEach(function (r) {
+        if (r.kind !== "*" && r.kind !== kind) return;
+        var run = 1, d, v;
+        for (d = -1; d > -60; d--) { v = cell(ctx, ctx.cal.delta(key, d), e.id); if (!isWork(ctx, v) || (r.kind !== "*" && kindOf(ctx, v) !== r.kind)) break; run++; }
+        for (d = 1; d < 60; d++) { v = cell(ctx, ctx.cal.delta(key, d), e.id); if (!isWork(ctx, v) || (r.kind !== "*" && kindOf(ctx, v) !== r.kind)) break; run++; }
+        if (run > r.value) out.push({ rule: r, text: "بیش از " + fa(r.value) + " روز متوالی (" + fa(run) + " روز)" });
+      });
+      return out;
+    }
+    // Per-employee counters over a set of days.
+    function addTo(ctx, x, sid, key, off) {
+      var kind = kindOf(ctx, sid);
+      x.kinds[kind] = (x.kinds[kind] || 0) + 1;
+      x.mins += shiftMins(ctx, sid);
+      if (off) x.off++;
+      if (!x.lastKind[kind] || key > x.lastKind[kind]) x.lastKind[kind] = key;
+      if (key > x.lastAny) x.lastAny = key;
+    }
+    function stats(ctx, keys) {
+      var st = {};
+      (ctx.employees || []).forEach(function (e) { st[e.id] = { kinds: {}, mins: 0, off: 0, lastKind: {}, lastAny: "" }; });
+      keys.forEach(function (k) {
+        var day = ctx.assignments[k] || {}, off = ctx.cal.isOff(k);
+        Object.keys(day).forEach(function (eid) {
+          var x = st[eid], sid = day[eid];
+          if (x && isWork(ctx, sid)) addTo(ctx, x, sid, k, off);
+        });
+      });
+      return st;
+    }
+    // This month plus the two months before (history carries over between months).
+    function combined(S, id) {
+      var c = S.cur[id], p = S.prior[id];
+      if (!p) return c;
+      var kinds = {}, lastKind = {};
+      Object.keys(c.kinds).concat(Object.keys(p.kinds)).forEach(function (q) { kinds[q] = (c.kinds[q] || 0) + (p.kinds[q] || 0); });
+      Object.keys(c.lastKind).concat(Object.keys(p.lastKind)).forEach(function (q) {
+        var a = c.lastKind[q] || "", b = p.lastKind[q] || "";
+        lastKind[q] = a > b ? a : b;
+      });
+      var la = c.lastAny || "", lb = p.lastAny || "";
+      return { kinds: kinds, off: c.off + p.off, mins: c.mins + p.mins, lastKind: lastKind, lastAny: la > lb ? la : lb };
+    }
+    // Candidate order for one shift kind: fewest of that kind, fewest off-days (on off-days),
+    // fewest hours, the one waiting longest for this kind, then the one whose last shift is oldest.
+    function fairCompare(a, b, kind, off) {
+      var ka = a.x.kinds[kind] || 0, kb = b.x.kinds[kind] || 0;
+      if (ka !== kb) return ka - kb;
+      if (off && a.x.off !== b.x.off) return a.x.off - b.x.off;
+      if (a.x.mins !== b.x.mins) return a.x.mins - b.x.mins;
+      var la = a.x.lastKind[kind] || "", lb = b.x.lastKind[kind] || "";
+      if (la !== lb) return la < lb ? -1 : 1;
+      var aa = a.x.lastAny || "", ab = b.x.lastAny || "";
+      if (aa !== ab) return aa < ab ? -1 : 1;
+      return byName(a.e, b.e);
+    }
+    function underCap(ctx, S, e, s) {
+      var g = groupOf(ctx, e.groupId);
+      if (!g || !g.maxHours) return true;
+      return (S.cur[e.id].mins + shiftMins(ctx, s.id)) / 60 <= g.maxHours;
+    }
+    // Plain-language reasons why nobody in the pool can take the shift, grouped and counted.
+    function reasons(ctx, S, key, pool, s, needShare, day) {
+      if (!pool.length) return ["هیچ کارمند فعالی در این گروه نیست"];
+      var count = {}, order = [];
+      pool.forEach(function (e) {
+        if (day[e.id] === s.id) return;
+        var r = blocker(ctx, S, key, day, e, s, needShare);
+        if (!r) r = "کسی در وضعیت مناسب نیست";
+        if (!count[r]) { count[r] = 0; order.push(r); }
+        count[r]++;
+      });
+      return order.sort(function (a, b) { return count[b] - count[a]; }).slice(0, 4).map(function (r) { return fa(count[r]) + " نفر: " + r; });
+    }
+    // The first reason a person cannot take shift s on day key ("" = can take it).
+    function blocker(ctx, S, key, day, e, s, needShare) {
+      if (day[e.id] !== undefined && day[e.id] !== "") return day[e.id] === ctx.leave ? "مرخصی یا استعلاجی" : "همان روز شیفت دیگری دارد";
+      if (needShare && !shareOf(ctx, e)) return "گروهش در تقسیم مساوی شرکت ندارد";
+      if (!allowed(ctx, s, e)) return "شیفت برای گروه یا الگوی زمانی این نفر مجاز نیست";
+      if (!underCap(ctx, S, e, s)) return "سقف ساعت ماهانه گروهش پر است";
+      var bad = hardOf(violations(ctx, e, key, s.id));
+      return bad.length ? bad[0].text : "";
+    }
+    // Fills the empty slots of one day. Hard group minimums first, then the plain shift minimums.
+    function generateDay(ctx, S, key, gid) {
+      var dow = ctx.cal.dow(key), off = ctx.cal.isOff(key);
+      var day = ctx.assignments[key] || (ctx.assignments[key] = {});
+      var emps = (ctx.employees || []).filter(function (e) { return e.active && (!gid || e.groupId === gid); }).sort(byName);
+      var picks = [], short = [];
+      function inScope(s) { return !gid || (s.groups || [])[0] === gid; }
+      function pick(list, s) {
+        var kind = kindOf(ctx, s.id);
+        list.sort(function (a, b) { return fairCompare({ e: a, x: combined(S, a.id) }, { e: b, x: combined(S, b.id) }, kind, off); });
+        return list[0];
+      }
+      function place(e, s) {
+        day[e.id] = s.id;
+        addTo(ctx, S.cur[e.id], s.id, key, off);
+        picks.push({ name: fullName(e), shift: s.name, employeeId: e.id, shiftId: s.id });
+      }
+      // 1) hard group minimums (e.g. one doctor on night shift)
+      rulesOf(ctx, "minInGroup").forEach(function (r) {
+        (ctx.shifts || []).filter(inScope).forEach(function (s) {
+          if (!(r.kind === "*" || kindOf(ctx, s.id) === r.kind) || (s.days || []).indexOf(dow) < 0) return;
+          if ((s.groups || [])[0] !== r.groupId || !span(s)) return;
+          var have = emps.filter(function (e) { return day[e.id] === s.id && e.groupId === r.groupId; }).length;
+          while (have < r.value) {
+            var cands = emps.filter(function (e) { return e.groupId === r.groupId && !blocker(ctx, S, key, day, e, s, false); });
+            if (!cands.length) break;
+            place(pick(cands, s), s); have++;
+          }
+          if (have < r.value) {
+            var pool = emps.filter(function (e) { return e.groupId === r.groupId; });
+            short.push({ shift: groupName(ctx, r.groupId) + " · " + s.name, n: r.value - have, reasons: reasons(ctx, S, key, pool, s, false, day) });
+          }
+        });
+      });
+      // 2) plain shift minimums, filled from groups that share equally
+      (ctx.shifts || []).filter(inScope).filter(function (s) { return s.min > 0 && (s.days || []).indexOf(dow) >= 0 && span(s); })
+        .sort(function (a, b) { return (a.mode === "mandatory" ? 0 : 1) - (b.mode === "mandatory" ? 0 : 1) || b.min - a.min; })
+        .forEach(function (s) {
+          var have = emps.filter(function (e) { return day[e.id] === s.id; }).length;
+          while (have < s.min) {
+            var cands = emps.filter(function (e) { return !blocker(ctx, S, key, day, e, s, true); });
+            if (!cands.length) break;
+            place(pick(cands, s), s); have++;
+          }
+          if (have < s.min) short.push({ shift: s.name, n: s.min - have, reasons: reasons(ctx, S, key, emps, s, true, day) });
+        });
+      return { picks: picks, short: short };
+    }
+    // Generates every open day of a month. Frozen days (locked or past) are skipped.
+    // Returns the picks, the shortages with their reasons, and the frozen days left as they are.
+    // startKey: the first day that may be generated; days before it keep whatever they have.
+    function generateMonth(ctx, anyKey, gid, startKey) {
+      var keys = ctx.cal.monthKeys(anyKey).filter(function (k) { return !startKey || k >= startKey; });
+      var out = { filled: 0, days: [], short: [], frozenDays: [], removedExempt: 0 };
+      // Open days: an assignment that now conflicts with an exemption is removed first.
+      keys.forEach(function (k) {
+        if (frozen(ctx, k) || !ctx.assignments[k]) return;
+        var day = ctx.assignments[k];
+        Object.keys(day).forEach(function (eid) {
+          var e = (ctx.employees || []).filter(function (x) { return x.id === eid; })[0];
+          if (e && !frozen(ctx, k, eid) && isWork(ctx, day[eid]) && exemptOf(e, k, kindOf(ctx, day[eid]))) { delete day[eid]; out.removedExempt++; }
+        });
+        if (!Object.keys(day).length) delete ctx.assignments[k];
+      });
+      var S = { cur: stats(ctx, ctx.cal.monthKeys(anyKey)), prior: stats(ctx, ctx.cal.priorKeys(anyKey)) };
+      keys.forEach(function (k) {
+        if (frozen(ctx, k)) { out.frozenDays.push(k); return; }
+        var r = generateDay(ctx, S, k, gid);
+        out.filled += r.picks.length;
+        if (r.picks.length) out.days.push(k);
+        if (r.short.length) out.short.push({ date: k, items: r.short });
+        if (ctx.assignments[k] && !Object.keys(ctx.assignments[k]).length) delete ctx.assignments[k];
+      });
+      return out;
+    }
+    // Validates a month as it is saved: hard and soft rule breaks, shift minimums left open.
+    function check(ctx, keys) {
+      var hard = [], soft = [], short = [];
+      keys.forEach(function (k) {
+        var day = ctx.assignments[k] || {}, dow = ctx.cal.dow(k);
+        (ctx.employees || []).forEach(function (e) {
+          var sid = day[e.id];
+          if (!isWork(ctx, sid)) return;
+          if (!allowed(ctx, shiftOf(ctx, sid), e)) hard.push({ date: k, name: fullName(e), text: "شیفت برای گروه یا الگوی زمانی این نفر مجاز نیست", rule: "pattern" });
+          violations(ctx, e, k, sid).forEach(function (v) {
+            (v.rule.mode === "hard" ? hard : soft).push({ date: k, name: fullName(e), text: v.text, rule: v.rule.id });
+          });
+        });
+        (ctx.shifts || []).forEach(function (s) {
+          if (s.mode !== "mandatory" || !(s.min > 0) || (s.days || []).indexOf(dow) < 0) return;
+          var have = (ctx.employees || []).filter(function (e) { return e.active && day[e.id] === s.id; }).length;
+          if (have < s.min) short.push({ date: k, shift: s.name, n: s.min - have, rule: "shift-min" });
+        });
+        rulesOf(ctx, "minInGroup").forEach(function (r) {
+          (ctx.shifts || []).forEach(function (s) {
+            if (!(r.kind === "*" || kindOf(ctx, s.id) === r.kind) || (s.days || []).indexOf(dow) < 0) return;
+            if ((s.groups || [])[0] !== r.groupId) return;
+            var have = (ctx.employees || []).filter(function (e) { return e.active && e.groupId === r.groupId && day[e.id] === s.id; }).length;
+            if (have < r.value) short.push({ date: k, shift: groupName(ctx, r.groupId) + " · " + s.name, n: r.value - have, rule: r.id });
+          });
+        });
+      });
+      // Shortages on frozen days (past or locked) cannot be fixed any more, so they are not reported as open.
+      return { hard: hard, soft: soft, short: short.filter(function (x) { return !frozen(ctx, x.date); }) };
+    }
+    // One row per enabled rule (in rule order), then the shift minimums. Used by the waiting card.
+    function ruleReport(ctx, keys) {
+      var ch = check(ctx, keys), all = ch.hard.concat(ch.soft), rows = [];
+      (ctx.rules || []).filter(function (r) { return r.enabled; }).forEach(function (r) {
+        var hits = all.filter(function (x) { return x.rule === r.id; });
+        var first = hits[0] ? (hits[0].date ? fa(hits[0].date) + " · " : "") + (hits[0].name ? hits[0].name + ": " : "") + hits[0].text : "";
+        rows.push({ id: r.id, label: r.label, mode: r.mode, count: hits.length, sample: first });
+      });
+      var open = ch.short.filter(function (x) { return x.rule === "shift-min"; });
+      var n = open.reduce(function (a, x) { return a + x.n; }, 0);
+      rows.push({ id: "shift-min", label: "حداقل نیروی شیفت‌ها", mode: "soft", count: n, sample: open[0] ? fa(open[0].date) + " · " + open[0].shift + " · کمبود " + fa(open[0].n) : "" });
+      return { rows: rows };
+    }
+    function spread(list) {
+      if (!list.length) return { n: 0, min: 0, max: 0, avg: 0, pct: 0 };
+      var min = Math.min.apply(null, list), max = Math.max.apply(null, list);
+      var avg = list.reduce(function (a, b) { return a + b; }, 0) / list.length;
+      return { n: list.length, min: min, max: max, avg: avg, pct: avg ? (max - min) / avg : 0 };
+    }
+    // Two levels: overall (all active staff, hours of the month) and per group.
+    function fairness(ctx, keys) {
+      var st = stats(ctx, keys), all = [], groups = {};
+      (ctx.employees || []).forEach(function (e) {
+        if (!e.active) return;
+        var h = st[e.id].mins / 60;
+        all.push(h);
+        (groups[e.groupId] = groups[e.groupId] || []).push(h);
+      });
+      return {
+        overall: spread(all),
+        groups: Object.keys(groups).map(function (gid) { return { gid: gid, name: groupName(ctx, gid), stat: spread(groups[gid]) }; })
+      };
+    }
+    root.SchedEngine = {
+      fa: fa, hm: hm, span: span, violations: violations, allowed: allowed, frozen: frozen,
+      stats: stats, generateDay: generateDay, generateMonth: generateMonth, check: check, fairness: fairness, exemptOf: exemptOf, ruleReport: ruleReport
+    };
+  })(typeof window !== "undefined" ? window : this);
+</script>
 <script>
 (function () {
   "use strict";
@@ -666,10 +1202,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     clock: svg('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>')
   };
   // Logo: a gold shield (the "ban" = guardian) holding a navy medical cross with a gold pivot.
-  var LOGO = '<svg viewBox="0 0 48 56" aria-hidden="true"><path d="M24 2 44 9v18c0 13-8.5 22-20 27C12.5 49 4 40 4 27V9z" fill="#c8962e"/>' +
-    '<path d="M24 2 44 9v18c0 13-8.5 22-20 27z" fill="#fff" fill-opacity=".2"/>' +
-    '<path d="M24 6.4 40.2 12v15c0 10.6-6.9 18.2-16.2 22.6C14.7 45.2 7.8 37.6 7.8 27V12z" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="1.2"/>' +
-    '<rect x="20" y="16" width="8" height="25" rx="2.6" fill="#14213d"/><rect x="11.5" y="24.5" width="25" height="8" rx="2.6" fill="#14213d"/><circle cx="24" cy="28.5" r="3" fill="#c8962e"/></svg>';
+  var LOGO = '<svg viewBox="0 0 48 56" aria-hidden="true"><defs><linearGradient id="lgG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ecd07a"/><stop offset="1" stop-color="#a9741a"/></linearGradient><linearGradient id="lgN" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22386a"/><stop offset="1" stop-color="#0d182f"/></linearGradient></defs><path d="M24 1.5 45 8.5v19c0 13.5-9 23.2-21 27-12-3.8-21-13.5-21-27v-19z" fill="url(#lgG)"/><path d="M24 5.2 41.2 11v16.5c0 11.6-7.4 19.6-17.2 23.6-9.8-4-17.2-12-17.2-23.6V11z" fill="url(#lgN)"/><path d="M25.74 14.62A12.5 12.5 0 0 1 35.59 31.68" fill="none" stroke="#ecd07a" stroke-width="2.6" stroke-linecap="round"/><path d="M33.85 34.7A12.5 12.5 0 0 1 14.15 34.7" fill="none" stroke="#8fb8ff" stroke-width="2.6" stroke-linecap="round"/><path d="M12.41 31.68A12.5 12.5 0 0 1 22.26 14.62" fill="none" stroke="#6f86b5" stroke-width="2.6" stroke-linecap="round"/><rect x="21.2" y="21" width="5.6" height="12" rx="1.8" fill="#ffffff"/><rect x="18.2" y="24.2" width="11.6" height="5.6" rx="1.8" fill="#ffffff"/></svg>';
   function logoHTML() { return '<div class="logo">' + LOGO + "<b>کلین‌بان<small>مدیریت شیفت کلینیک</small></b></div>"; }
   function $(s, r) { return (r || document).querySelector(s); }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
@@ -697,7 +1230,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
   var state = {
     screen: "loading", view: "home", flash: "", fails: 0, calStart: null, lastBackup: null,
     staffTab: "list", staffMode: "list", editingId: null, formPhoto: null, empDelete: false,
-    groupEdit: null, groupDelete: null, groupMsg: "", filter: { q: "", group: "all", status: "active" }, shiftEdit: null, shiftDelete: null, shiftMsg: "", rosterMsg: "", rulesMsg: ""
+    groupEdit: null, groupDelete: null, groupMsg: "", filter: { q: "", group: "all", status: "active" }, shiftEdit: null, shiftDelete: null, shiftMsg: "", rosterMsg: "", rulesMsg: "", ruleEdit: null, ruleDelete: null
   };
 
   function authHTML(mode) {
@@ -759,21 +1292,19 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
         var sp = shiftSpan(s), who = emps.filter(function (e) { return e.groupId === g.id && assignOf(key, e.id) === s.id; });
         var short = s.mode === "mandatory" && s.min > 0 && who.length < s.min;
         return '<div class="kb-card' + (short ? " is-short" : "") + '"><div class="kb-top"><b>' + esc(s.name.split(" · ")[0]) + "</b><small>" + hmText(sp.a) + " – " + hmText(sp.b) + "</small></div>" +
-          '<div class="kb-people">' + (who.length ? who.map(function (e) { return '<span class="kb-chip">' + esc(e.firstName + " " + e.lastName) + "</span>"; }).join("") : '<span class="hint">کسی تخصیص نیافته</span>') + "</div>" +
+          '<div class="kb-people" title="' + esc(who.map(function (e) { return e.firstName + " " + e.lastName; }).join("، ")) + '">' + (who.length ? esc(who.map(function (e) { return e.firstName + " " + e.lastName; }).join("، ")) : '<span class="hint">کسی تخصیص نیافته</span>') + "</div>" +
           '<small class="kb-count">' + faDigits(who.length) + (s.min ? " از حداقل " + faDigits(s.min) : "") + (short ? " · کمبود" : "") + "</small></div>";
       }).join("");
       var leaveHTML = leave.length ? '<div class="kb-leave">مرخصی امروز: ' + leave.map(function (e) { return esc(e.firstName); }).join("، ") + "</div>" : "";
       return '<div class="kb-col"><div class="kb-head"><span class="kb-dot"></span><b>' + esc(g.name) + "</b></div>" + (cards || '<p class="hint">شیفتی برای امروز تعریف نشده</p>') + leaveHTML + "</div>";
     }).join("");
     return '<section class="card"><div class="card-head"><h2>شیفت‌های امروز</h2><small class="hint">' + faDigits(key) + "</small></div>" +
-      (cols ? '<div class="kb-wrap">' + cols + "</div>" : '<p class="hint">گروهی تعریف نشده است.</p>') + "</section>";
+      (cols ? '<div class="kb-wrap" style="--cols:' + Math.max(1, liveGroups().length) + '">' + cols + "</div>" : '<p class="hint">گروهی تعریف نشده است.</p>') + "</section>";
   }
   function homeHTML() {
-    var today = utcNoon(new Date()), start = monthStartOf(today);
-    return '<section class="hero"><span class="eyebrow">داشبورد مدیر</span><h1>سلام، مدیر کلینیک</h1><p>گروه‌ها و کارکنان کلینیک ثبت می‌شوند. مرحله بعد، تعریف انواع شیفت و الگوی کاری هر گروه است.</p><div class="today">' + longDate(today) + "</div></section>" +
-      todayBoardHTML() + '<div class="grid2"><div class="stack">' + calHTML() + "</div></div>" +
-      '<div class="stack">' + staffSummaryHTML() + '<section class="card"><h2>وضعیت داده‌ها</h2><dl class="kv"><div><dt>آخرین پشتیبان</dt><dd id="st-backup">…</dd></div><div><dt>ذخیره‌سازی مرورگر</dt><dd id="st-store">…</dd></div></dl></section>' +
-      '<section class="card"><h2>مسیر توسعه</h2>' + stepsHTML() + "</section></div></div>";
+    var today = utcNoon(new Date());
+    return '<div class="dash"><section class="hero dash-hero"><div class="dash-brand"><span class="rs-logo">' + (state.clinicLogo ? '<img class="clinic-img" src="' + state.clinicLogo + '" alt="">' : LOGO) + '</span><div><b class="dash-clinic">' + esc(state.clinicName || "کلین‌بان") + '</b><small>داشبورد مدیر</small></div></div><h1>سلام، مدیر کلینیک</h1><div class="today">' + longDate(today) + "</div></section>" +
+      '<div class="dash-main"><div class="dash-cal">' + calHTML() + '</div><div class="dash-board">' + todayBoardHTML() + "</div></div></div>";
   }
 
   function calHTML() {
@@ -804,7 +1335,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
   function settingsHTML() {
     var cur = "system"; try { cur = localStorage.getItem("cs-theme") || "system"; } catch (e) {}
     function seg(v, t) { return '<button type="button" data-action="theme" data-value="' + v + '" aria-pressed="' + (cur === v) + '">' + t + "</button>"; }
-    return '<div class="grid2">' + (inViewer ? "" : '<section class="card"><h2>نام کلینیک</h2><form data-form="clinic-name" class="form-narrow" style="display:grid;gap:14px" novalidate>' + '<label class="field" for="cn-name"><span>نام کلینیک (در صفحه ورود نمایش داده می‌شود)</span><input class="control" id="cn-name" name="cn-name" maxlength="60" autocomplete="off" value="' + esc(state.clinicName || "") + '" placeholder="مثلاً: کلینیک نور"></label>' + '<p class="msg" id="cn-msg" role="status" hidden></p><button class="btn" type="submit">ذخیره نام</button></form></section>') + '<section class="card"><h2>تغییر رمز مدیر</h2><form data-form="change-pw" class="form-narrow" style="display:grid;gap:14px" novalidate>' +
+    return '<div class="grid2">' + (inViewer ? "" : '<section class="card"><h2>نام کلینیک</h2><form data-form="clinic-name" class="form-narrow" style="display:grid;gap:14px" novalidate>' + '<label class="field" for="cn-name"><span>نام کلینیک (در صفحه ورود نمایش داده می‌شود)</span><input class="control" id="cn-name" name="cn-name" maxlength="60" autocomplete="off" value="' + esc(state.clinicName || "") + '" placeholder="مثلاً: کلینیک نور"></label>' + '<p class="msg" id="cn-msg" role="status" hidden></p><button class="btn" type="submit">ذخیره نام</button></form></section>') + (inViewer ? "" : logoCardHTML()) + '<section class="card"><h2>تغییر رمز مدیر</h2><form data-form="change-pw" class="form-narrow" style="display:grid;gap:14px" novalidate>' +
       pwField("old-pw", "رمز فعلی", "current-password", false) + pwField("new-pw", "رمز جدید (حداقل ۸ کاراکتر)", "new-password", true) + pwField("new-pw2", "تکرار رمز جدید", "new-password", false) +
       '<p class="msg" id="cp-msg" role="status" hidden></p><button class="btn" type="submit">ثبت رمز جدید</button></form></section>' +
       '<div class="stack">' + (inViewer ? "" : '<section class="card"><h2>پوسته</h2><div class="seg">' + seg("system", "خودکار") + seg("light", "روشن") + seg("dark", "تیره") + "</div></section>") + auditHTML() +
@@ -923,6 +1454,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
       if (!a || typeof a.hash !== "string" || typeof a.salt !== "string" || !a.iterations) throw new Error("ساختار پشتیبان کامل نیست.");
       await kvReplaceAll(entries);
       state.clinicName = (entries["clinic.name"] && typeof entries["clinic.name"] === "string") ? entries["clinic.name"] : "";
+      state.clinicLogo = (entries["clinic.logo"] && typeof entries["clinic.logo"] === "string") ? entries["clinic.logo"] : "";
       state.flash = "پشتیبان بازیابی شد. با رمز مدیر موجود در پشتیبان وارد شوید.";
       state.screen = "login"; render();
     } catch (e) { setMsg("rs-msg", e.message || "بازیابی ناموفق بود.", "error"); }
@@ -940,7 +1472,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
   // ================= data: job groups, employees, audit log =================
   var K_GROUPS = "data.jobGroups", K_EMP = "data.employees", K_AUDIT = "data.audit", CLINIC = "default";
   var DEFAULT_GROUPS = ["پزشکان", "پرستاران", "پذیرش و منشی", "خدمات و پشتیبانی", "سایر مشاغل"];
-  var data = { groups: [], employees: [], audit: [], assignments: {}, shifts: [], patterns: {} };
+  var data = { groups: [], employees: [], audit: [], assignments: {}, shifts: [], patterns: {}, locks: {} };
 
   function uid() {
     var b = crypto.getRandomValues(new Uint8Array(8)), s = "";
@@ -996,6 +1528,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     h.value = v;
     if (tx) { tx.textContent = v ? friendlyJ(v) : "انتخاب تاریخ"; tx.className = "datebtn-text" + (v ? "" : " empty"); }
     if (id === "roster-date") { state.rosterDate = v || null; refreshRoster("roster-date-btn"); }
+    if (id === "report-date") { state.reportDate = v || null; render(); }
   }
   function pickerRoot() { return document.getElementById("picker-root"); }
   function openPicker(targetId, clearable, opener) {
@@ -1072,10 +1605,19 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     data.shifts = sh;
     data.patterns = (await kvGet(K_PATTERNS)) || {};
     data.holidays = (await kvGet(K_HOL)) || [];
+    data.locks = (await kvGet(K_LOCKS)) || {};
     await splitSharedShifts();
     var rl = await kvGet(K_RULES);
     data.rules = rl || defaultRules();
     if (!rl) await kvSet(K_RULES, data.rules);
+    else {
+      // common-core rules added in later versions are appended once, existing settings are kept
+      var haveIds = data.rules.map(function (r) { return r.id; }), addedRule = false;
+      defaultRules().forEach(function (d) {
+        if (COMMON_RULE_IDS.indexOf(d.id) >= 0 && haveIds.indexOf(d.id) < 0) { data.rules.push(d); addedRule = true; }
+      });
+      if (addedRule) await kvSet(K_RULES, data.rules);
+    }
   }
   // Every shift belongs to exactly one job group. Shared shifts (no group, or several groups) are
   // split into one copy per group; old shifts are soft-deleted and assignments/patterns follow the copy.
@@ -1152,7 +1694,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
   }
   function staffSeg(v, t) { return '<button type="button" data-action="staff-tab" data-value="' + v + '" aria-pressed="' + (state.staffTab === v) + '">' + t + "</button>"; }
   function staffPage() {
-    return '<div class="page-head"><div><h1 class="page-title">کارکنان</h1><p class="hint">گروه‌های شغلی و مشخصات کارکنان کلینیک</p></div><div class="seg">' + staffSeg("list", "کارکنان") + staffSeg("roster", "برنامه ماهانه") + staffSeg("fair", "عدالت") + staffSeg("reports", "گزارش‌ها") + staffSeg("rules", "قوانین") + staffSeg("shifts", "انواع شیفت") + staffSeg("groups", "گروه‌های شغلی") + "</div></div>" +
+    return '<div class="page-head"><div><h1 class="page-title">کارکنان</h1><p class="hint">گروه‌های شغلی و مشخصات کارکنان کلینیک</p></div><div class="seg tab-grid">' + staffSeg("list", "کارکنان") + staffSeg("roster", "برنامه ماهانه") + staffSeg("fair", "عدالت") + staffSeg("reports", "گزارش‌ها") + staffSeg("rules", "قوانین") + staffSeg("shifts", "انواع شیفت") + staffSeg("groups", "گروه‌های شغلی") + "</div></div>" +
       (state.staffTab === "roster" ? '<div id="roster-area">' + rosterArea() + "</div>" : state.staffTab === "rules" ? rulesHTML() : state.staffTab === "reports" ? reportsHTML() : state.staffTab === "fair" ? fairHTML() : state.staffTab === "shifts" ? shiftsHTML() : state.staffTab === "groups" ? groupsHTML() : state.staffMode === "form" ? empFormHTML() : empListHTML());
   }
   function empListHTML() {
@@ -1188,6 +1730,51 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     var g = data.groups.find(function (x) { return x.id === gid; });
     return ((g && g.titles) || []).map(function (t) { return '<option value="' + esc(t) + '">'; }).join("");
   }
+  // Personal exemptions: from/to dates (inclusive), shift kinds, optional reason. Saved straight to the employee.
+  function exemptAreaHTML(e) {
+    var list = (e.exemptions || []).slice().sort(function (a, b) { return a.from < b.from ? -1 : 1; });
+    var rows = list.length ? list.map(function (x) {
+      var kinds = x.kinds.indexOf("*") >= 0 ? "همه‌ی شیفت‌ها" : x.kinds.map(kindLabel).join("، ");
+      return '<div class="rule-row"><div class="rule-main"><b>' + esc(kinds) + '</b><small class="hint">از ' + esc(friendlyJ(x.from)) + " تا " + esc(friendlyJ(x.to)) + (x.reason ? " · " + esc(x.reason) : "") + "</small></div>" +
+        '<div class="rule-ctl"><button type="button" class="btn ghost" data-action="exempt-del" data-value="' + esc(e.id) + '" data-id="' + esc(x.id) + '">حذف معافیت</button></div></div>';
+    }).join("") : '<p class="hint">معافیتی ثبت نشده است.</p>';
+    var kindChecks = [["*", "همه"]].concat(SHIFT_KINDS).map(function (k) {
+      return '<label class="chk-chip"><input type="checkbox" name="ex-kind" value="' + k[0] + '"><span>' + k[1] + "</span></label>";
+    }).join("");
+    return '<div id="exempt-area" class="wide"><h3 class="fair-title">معافیت از شیفت</h3><p class="hint">در بازه‌ی تاریخی زیر، این فرد برای شیفت‌های انتخابی برنامه‌ریزی نمی‌شود. روزهای گذشته تغییر نمی‌کنند.</p>' + rows +
+      '<div class="exempt-form"><div class="form-grid">' + dateFieldHTML("ex-from", "از تاریخ", "", { clearable: true }) + dateFieldHTML("ex-to", "تا تاریخ", "", { clearable: true }) + "</div>" +
+      '<div class="chips">' + kindChecks + "</div>" +
+      '<label class="field"><span>دلیل (اختیاری)</span><input class="control" id="ex-reason" autocomplete="off"></label>' +
+      '<div class="row"><button type="button" class="btn" data-action="exempt-add" data-value="' + esc(e.id) + '">افزودن معافیت</button></div></div></div>';
+  }
+  function refreshExempt(e) { var el = document.getElementById("exempt-area"); if (el) el.outerHTML = exemptAreaHTML(e); }
+  async function exemptAdd(empId) {
+    var e = data.employees.find(function (x) { return x.id === empId; });
+    if (!e) return;
+    var from = document.getElementById("ex-from").value, to = document.getElementById("ex-to").value;
+    var reason = document.getElementById("ex-reason").value.trim();
+    var kinds = Array.prototype.map.call(document.querySelectorAll('#exempt-area input[name="ex-kind"]:checked'), function (i) { return i.value; });
+    setMsg("emp-msg", "");
+    if (!from || !to) return setMsg("emp-msg", "بازه‌ی تاریخ معافیت را کامل کنید.", "error");
+    if (from > to) return setMsg("emp-msg", "تاریخ پایان نمی‌تواند قبل از تاریخ شروع باشد.", "error");
+    if (!kinds.length) return setMsg("emp-msg", "حداقل یک نوع شیفت را انتخاب کنید.", "error");
+    var prev = e.exemptions || [];
+    e.exemptions = prev.concat([{ id: uid(), from: from, to: to, kinds: kinds, reason: reason }]);
+    e.updatedAt = new Date().toISOString();
+    try {
+      await saveEmployees();
+      await logAudit("معافیت", "کارمند", e.firstName + " " + e.lastName + " · " + friendlyJ(from) + " تا " + friendlyJ(to));
+      refreshExempt(e);
+    } catch (err) { e.exemptions = prev; setMsg("emp-msg", "ذخیره‌سازی ناموفق بود.", "error"); }
+  }
+  async function exemptRemove(empId, id) {
+    var e = data.employees.find(function (x) { return x.id === empId; });
+    if (!e) return;
+    var prev = e.exemptions || [];
+    e.exemptions = prev.filter(function (x) { return x.id !== id; });
+    try { await saveEmployees(); await logAudit("حذف معافیت", "کارمند", e.firstName + " " + e.lastName); refreshExempt(e); }
+    catch (err) { e.exemptions = prev; setMsg("emp-msg", "ذخیره‌سازی ناموفق بود.", "error"); }
+  }
   function empFormHTML() {
     var groups = liveGroups(), editing = state.editingId, e = {};
     if (editing) e = data.employees.find(function (x) { return x.id === editing; }) || {};
@@ -1203,6 +1790,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
       '<div class="wide photo-row"><span id="e-avatar">' + avatarHTML({ firstName: e.firstName, lastName: e.lastName, photo: state.formPhoto }, true) + '</span><div class="photo-actions"><label class="btn ghost" for="e-photo">انتخاب تصویر</label><input class="sr" id="e-photo" type="file" accept="image/*" data-photo="1"><button type="button" class="btn ghost" data-action="photo-clear">حذف تصویر</button></div></div>' +
       fld("e-first", "نام", e.firstName, 'autocomplete="off" required') + fld("e-last", "نام خانوادگی", e.lastName, 'autocomplete="off" required') +
       fld("e-code", "کد پرسنلی", e.code, 'inputmode="numeric" autocomplete="off" required') +
+      fld("e-latin", "نام لاتین (برای نام فایل گزارش)", e.latinName, 'dir="ltr" autocomplete="off" placeholder="Ali Ahmadi"') +
       '<label class="field" for="e-group"><span>گروه شغلی</span><select class="control" id="e-group" name="e-group">' + gopts + "</select></label>" +
       fld("e-specialty", "تخصص", e.specialty, 'autocomplete="off"') +
       '<label class="field" for="e-share"><span>تقسیم مساوی شیفت‌ها</span><select class="control" id="e-share" name="e-share">' + [["group", "طبق تنظیم گروه"], ["yes", "شرکت کند"], ["no", "معاف (فقط شیفت دستی)"]].map(function (o) { return '<option value="' + o[0] + '"' + ((e.equalShare || "group") === o[0] ? " selected" : "") + ">" + o[1] + "</option>"; }).join("") + "</select></label>" +
@@ -1210,6 +1798,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
       fld("e-phone", "شماره تماس", e.phone, 'inputmode="tel" autocomplete="off" dir="ltr"') +
       dateFieldHTML("e-start", "تاریخ شروع همکاری", e.startDate || "", { clearable: true }) +
       '<label class="field wide" for="e-restrictions"><span>محدودیت‌های کاری</span><textarea class="control plain" id="e-restrictions" name="e-restrictions" placeholder="مثلاً: شب‌کاری ممکن نیست">' + esc(e.restrictions || "") + "</textarea></label>" +
+      (editing ? exemptAreaHTML(e) : '<p class="hint wide">برای تعریف معافیت از شیفت، ابتدا کارمند را ذخیره کنید.</p>') +
       '<label class="check wide"><input type="checkbox" id="e-active" name="e-active"' + (!editing || e.active ? " checked" : "") + '><span>کارمند فعال است</span></label>' +
       '<p class="msg wide" id="emp-msg" role="alert" hidden></p>' +
       '<div class="row wide"><button class="btn" type="submit">ذخیره</button><button type="button" class="btn ghost" data-action="emp-cancel">انصراف</button></div>' +
@@ -1284,11 +1873,14 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
   // Monthly roster: one row per active employee, one column per day of the Jalali month.
   function rosterScope() { return state.rosterGroup && state.rosterGroup !== "all" ? state.rosterGroup : null; }
   // Empties the roster for the month shown: every employee, or only the group selected in "برنامه گروه".
-  async function clearRoster() {
+  // includePast = true only from the second, explicit confirmation. Locked months are refused either way.
+  async function clearRoster(includePast) {
     var date = rosterKey(), keys = monthKeys(date);
     var gid = state.rosterGroup && state.rosterGroup !== "all" ? state.rosterGroup : null;
-    var removed = 0;
+    var removed = 0, kept = 0;
+    if (monthLocked(date)) { state.rosterConfirm = false; state.rosterOk = false; state.rosterMsg = "این ماه تأیید نهایی شده است؛ قفل را بردارید تا پاک شود."; refreshRoster(); return; }
     keys.forEach(function (k) {
+      if (!includePast && SchedEngine.frozen(schedCtx(), k)) { if (data.assignments[k] && Object.keys(data.assignments[k]).length) kept++; return; }
       var day = data.assignments[k];
       if (!day) return;
       Object.keys(day).forEach(function (eid) {
@@ -1300,50 +1892,58 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     });
     try {
       await kvSet(K_ASSIGN, data.assignments);
-      await logAudit("پاک‌سازی", "برنامه ماهانه", (gid ? groupName(gid) : "همه گروه‌ها") + " · " + faDigits(date.slice(0, 7)));
-      state.rosterConfirm = false; state.rosterOk = true;
-      state.rosterMsg = removed ? "برنامه ماه " + faDigits(date.slice(0, 7)) + (gid ? " برای " + groupName(gid) : "") + " پاک شد. حالا می‌توانید دوباره تخصیص دهید." : "برنامه‌ای برای پاک کردن در این ماه وجود نداشت.";
+      await logAudit(includePast ? "پاک‌سازی با روزهای گذشته" : "پاک‌سازی", "برنامه ماهانه", (gid ? groupName(gid) : "همه گروه‌ها") + " · " + faDigits(date.slice(0, 7)));
+      state.rosterConfirm = false; state.rosterConfirmAll = false; state.rosterOk = true;
+      var keptNote = kept ? " " + faDigits(kept) + " روز گذشته برنامه دارد و دست‌نخورده ماند." : "";
+      keptNote = "";
+      state.rosterMsg = removed
+        ? "کل برنامه‌ی ماه " + faDigits(date.slice(0, 7)) + (gid ? " برای " + groupName(gid) : "") + " پاک شد." + keptNote
+        : (kept ? "فقط روزهای گذشته برنامه دارند؛ آن‌ها قابل پاک‌سازی نیستند." : "برنامه‌ای برای پاک کردن در این ماه وجود نداشت.");;
       refreshRoster();
     } catch (err) { state.rosterOk = false; state.rosterMsg = "پاک‌سازی ناموفق بود."; refreshRoster(); }
   }
   function rosterArea() {
+    if (state.rosterBusy) return busyHTML();
     if (state.rosterView === "day") return rosterDayHTML();
-    var date = rosterKey(), keys = monthKeys(date), msg = state.rosterMsg, msgOk = state.rosterOk;
+    var date = rosterKey(), keys = monthKeys(date), msg = state.rosterMsg, msgOk = state.rosterOk, lk = monthLocked(date);
     state.rosterMsg = ""; state.rosterOk = false;
     var emps = liveEmployees().filter(function (e) { return e.active && (!state.rosterGroup || state.rosterGroup === "all" || e.groupId === state.rosterGroup); }).sort(byName);
     var warnings = 0;
     var rgopts = '<option value="all">همه گروه‌ها</option>' + liveGroups().map(function (g) { return '<option value="' + esc(g.id) + '"' + (state.rosterGroup === g.id ? " selected" : "") + ">" + esc(g.name) + "</option>"; }).join("");
     var head = '<tr><th class="r-name" scope="col">کارمند</th>' + keys.map(function (k) {
       var dw = persianDow(k);
-      return '<th scope="col" class="' + (dw === 6 || isOffDay(k) ? "fri" : "") + '"><small>' + DOW_LETTERS[dw] + "</small>" + faDigits(+k.slice(-2)) + "</th>";
+      return '<th scope="col" class="' + (dw === 6 || isOffDay(k) ? "fri" : "") + (k === jKeyOf(new Date()) ? " is-today" : "") + '"><small>' + DOW_LETTERS[dw] + "</small>" + faDigits(+k.slice(-2)) + "</th>";
     }).join("") + "</tr>";
     var rows = emps.map(function (e) {
       var cells = keys.map(function (k) {
-        var cur = assignOf(k, e.id), dw = persianDow(k), id = "rs-" + e.id + "-" + k, off = dw === 6 || isOffDay(k);
+        var cur = assignOf(k, e.id), dw = persianDow(k), id = "rs-" + e.id + "-" + k, off = dw === 6 || isOffDay(k), fz = SchedEngine.frozen(schedCtx(), k, e.id);
         var opts = '<option value="">—</option>' + liveShifts().filter(function (s) {
-          return s.id === cur || (allowedFor(s, e) && s.days.indexOf(dw) >= 0);
+          return s.id === cur || (allowedFor(s, e) && s.days.indexOf(dw) >= 0 && !SchedEngine.exemptOf(e, k, kindOf(s.id)));
         }).map(function (s) { return '<option value="' + esc(s.id) + '"' + (s.id === cur ? " selected" : "") + ">" + esc(s.name) + "</option>"; }).join("") +
           '<option value="' + LEAVE + '"' + (cur === LEAVE ? " selected" : "") + ">مرخصی / استعلاجی</option>";
         var vs = isWork(cur) ? violationsAt(e, k, cur) : [], cls = (off ? "fri" : "") + " " + kindClass(cur);
         if (vs.length) { warnings += vs.length; cls += hardOnly(vs).length ? " r-bad" : " r-warn"; }
         var title = vs.length ? ' title="' + esc(vs.map(function (v) { return v.text; }).join("، ")) + '"' : "";
         return '<td class="' + cls + '"' + title + '><label class="sr" for="' + esc(id) + '">' + esc(e.firstName + " " + e.lastName) + " — " + faDigits(+k.slice(-2)) + "</label>" +
-          '<select class="control r-sel" id="' + esc(id) + '" data-roster-emp="' + esc(e.id) + '" data-roster-date="' + k + '">' + opts + "</select></td>";
+          '<select class="control r-sel" id="' + esc(id) + '" data-roster-emp="' + esc(e.id) + '" data-roster-date="' + k + '"' + (fz ? " disabled" : "") + '>' + opts + "</select></td>";
       }).join("");
-      return '<tr><th class="r-name" scope="row"><span class="gc" style="--gc:' + groupColor(e.groupId) + '"></span><b>' + esc(e.firstName + " " + e.lastName) + "</b><small>" + esc(groupName(e.groupId)) + "</small></th>" + cells + "</tr>";
+      return '<tr><th class="r-name" scope="row"><span class="av" style="--gc:' + groupColor(e.groupId) + '">' + esc((e.firstName || "").charAt(0) + (e.lastName || "").charAt(0)) + '</span><span class="nm"><b>' + esc(e.firstName + " " + e.lastName) + "</b><small>" + esc(groupName(e.groupId)) + "</small></span></th>" + cells + "</tr>";
     }).join("");
     var foot = keys.map(function (k) {
       var sh = shortFor(k).filter(function (x) { return !rosterScope() || x.gid === rosterScope(); });
       return '<td class="' + (sh.length ? "f-bad" : "f-ok") + '">' + (sh.length ? sh.map(function (x) { return esc(x.shift) + " " + faDigits(x.n); }).join("<br>") : '<span class="r-ok">✓</span>') + "</td>";
     }).join("");
-    return '<section class="card">' + rosterViewSegHTML() + rosterLegendHTML() + '<div class="fair-actions"><div class="roster-date">' + dateFieldHTML("roster-date", "ماه برنامه (هر روزی از ماه)", date, {}) + "</div>" +
+    return '<section class="card">' + rosterViewSegHTML() + rosterLegendHTML() + '<div class="fair-actions roster-tools"><div class="roster-date">' + dateFieldHTML("roster-date", "روز شروع پیشنهاد (ماه همین روز است)", date, {}) + "</div>" +
       '<label class="field" for="roster-group"><span>برنامه گروه</span><select class="control" id="roster-group" data-roster-group>' + rgopts + "</select></label>" +
-      '<button type="button" class="btn" data-action="fair-month">' + (rosterScope() ? "پیشنهاد عادلانه برای " + esc(groupName(rosterScope())) : "پیشنهاد عادلانه برای کل ماه") + '</button>' +
-      '<button type="button" class="btn danger" data-action="roster-clear">پاک کردن برنامه</button></div>' +
+      '<button type="button" class="btn" data-action="fair-month"' + (lk ? " disabled" : "") + '>' + (rosterScope() ? "پیشنهاد عادلانه برای " + esc(groupName(rosterScope())) : "پیشنهاد عادلانه برای کل ماه") + '</button>' +
+      '<button type="button" class="btn danger" data-action="roster-clear"' + (lk ? " disabled" : "") + '>پاک کردن برنامه</button>' +
+      '<button type="button" class="btn ghost" data-action="roster-validate">اعتبارسنجی برنامه</button>' +
+      (lk ? '<button type="button" class="btn" data-action="roster-unlock">برداشتن قفل ماه</button>' : '<button type="button" class="btn" data-action="roster-lock">تأیید نهایی ماه</button>') + '</div>' +
+      (lk ? '<p class="msg ok" role="status">این ماه تأیید نهایی شده است؛ پیشنهاد، پاک‌سازی و تغییر دستی روی آن انجام نمی‌شود.</p>' : "") +
       (msg ? '<p class="msg ' + (msgOk ? "ok" : "error") + '" role="alert">' + esc(msg) + "</p>" : "") +
       (state.rosterConfirm ? '<div class="confirm"><p>' + (state.rosterGroup && state.rosterGroup !== "all"
-        ? "برنامه " + esc(groupName(state.rosterGroup)) + " در ماه " + faDigits(date.slice(0, 7)) + " (شامل مرخصی‌ها) پاک شود؟"
-        : "کل برنامه ماه " + faDigits(date.slice(0, 7)) + " برای همه گروه‌ها (شامل مرخصی‌ها) پاک شود؟") +
+        ? "تمام برنامه‌ی گروه " + esc(groupName(state.rosterGroup)) + " در ماه " + faDigits(date.slice(0, 7)) + " (شامل روزهای گذشته و مرخصی‌ها) پاک خواهد شد. مطمئن هستید؟"
+        : "هشدار: کل برنامه‌ی ماه " + faDigits(date.slice(0, 7)) + " برای همه‌ی گروه‌ها (شامل روزهای گذشته و مرخصی‌ها) پاک خواهد شد. مطمئن هستید؟") +
         '</p><div class="row"><button type="button" class="btn danger" data-action="roster-clear-yes">بله، پاک شود</button><button type="button" class="btn ghost" data-action="roster-clear-no">انصراف</button></div></div>' : "") +
       '<p class="hint">هر خانه را مستقیم عوض کنید. خانه‌ی نارنجی هشدار قانون نرم دارد؛ خانه‌ی قرمز قانون سخت را نقض می‌کند. ستون جمعه و تعطیل رنگی است.' +
       (warnings ? ' <b class="r-warnnote">' + faDigits(warnings) + " هشدار در این ماه</b>" : "") + "</p>" +
@@ -1376,7 +1976,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     var shifts = liveShifts().filter(function (s) { return s.days.indexOf(dow) >= 0 && (!gid || (s.groups || [])[0] === gid); });
     function card(e) {
       var cur = assignOf(key, e.id);
-      var opts = '<option value="">—</option>' + liveShifts().filter(function (s) { return s.id === cur || (allowedFor(s, e) && s.days.indexOf(dow) >= 0); }).map(function (s) {
+      var opts = '<option value="">—</option>' + liveShifts().filter(function (s) { return s.id === cur || (allowedFor(s, e) && s.days.indexOf(dow) >= 0 && !SchedEngine.exemptOf(e, key, kindOf(s.id))); }).map(function (s) {
         return '<option value="' + esc(s.id) + '"' + (s.id === cur ? " selected" : "") + ">" + esc(s.name) + "</option>";
       }).join("") + '<option value="' + LEAVE + '"' + (cur === LEAVE ? " selected" : "") + ">مرخصی / استعلاجی</option>";
       var vs = isWork(cur) ? violationsAt(e, key, cur) : [], st = hardOnly(vs).length ? " is-bad" : vs.length ? " is-warn" : "";
@@ -1412,6 +2012,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
   async function rosterSet(empId, date, key) {
     var e = data.employees.find(function (x) { return x.id === empId; }), focus = "rs-" + empId + "-" + date;
     if (!e) { refreshRoster(); return; }
+    if (SchedEngine.frozen(schedCtx(), date, empId)) { state.rosterOk = false; state.rosterMsg = "برای " + e.firstName + " " + e.lastName + " سابقه‌ی این روز ثبت شده یا ماه تأیید نهایی شده است؛ تغییر نمی‌کند."; refreshRoster(focus); return; }
     var s = isWork(key) ? shiftById(key) : null;
     if (s && !allowedFor(s, e)) {
       state.rosterOk = false;
@@ -1637,7 +2238,8 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
       '<div class="pk-foot"><button type="button" class="btn" data-tk="ok">تأیید</button><button type="button" class="btn ghost" data-tk="close">انصراف</button></div></div></div>';
   }
 
-  var K_RULES = "data.rules", K_HOL = "data.holidays";
+  var K_RULES = "data.rules", K_HOL = "data.holidays", K_LOCKS = "data.locks";
+  var COMMON_RULE_IDS = ["night-off", "eve-morn"], BOOL_RULE_TYPES = ["nightOff", "eveMorn"];
   // ---------- fairness engine & planning rules ----------
   // Suggestions, warnings and the report all read the same functions below.
   var FAIR_TOL = 0.15;              // report band: ±15% of the group's average hours
@@ -1714,122 +2316,145 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     if (aa !== ab) return aa < ab ? -1 : 1;
     return byName(a.e, b.e);
   }
-  // Rule violations if employee e works shift sid on day key. Neighbouring days come from the saved roster.
-  function violationsAt(e, key, sid) {
-    var out = [];
-    if (!isWork(sid)) return out;
-    var s = shiftById(sid), kind = kindOf(sid), D = dayIdx(key);
-    var start = D * 1440 + hm(s.start), end = start + shiftSpan(s).mins;
-    rulesOn("restGap").forEach(function (r) {
-      [-1, 1].forEach(function (d) {
-        var nsid = assignOf(keyDelta(key, d), e.id);
-        if (!isWork(nsid)) return;
-        var ns = shiftById(nsid), nstart = (D + d) * 1440 + hm(ns.start), nend = nstart + shiftSpan(ns).mins;
-        var gap = d < 0 ? start - nend : nstart - end;
-        if (gap < r.value * 60) out.push({ rule: r, text: "استراحت " + faDigits(Math.max(0, Math.floor(gap / 60))) + " ساعت؛ حداقل " + faDigits(r.value) + " ساعت لازم است" });
+  // The engine reads the app's data through this view. Only the assignment table may be a working copy.
+  function schedCtx(assignments) {
+    return {
+      employees: liveEmployees(), groups: data.groups, shifts: data.shifts, patterns: data.patterns,
+      rules: data.rules || [], holidays: data.holidays || [], assignments: assignments || data.assignments,
+      locks: data.locks || {}, today: jKeyOf(new Date()), leave: LEAVE,
+      cal: { idx: dayIdx, delta: keyDelta, dow: persianDow, isOff: isOffDay, monthKeys: monthKeys, priorKeys: priorKeys }
+    };
+  }
+  // A month is approved when the manager locks it. Days already past are frozen as well (see SchedEngine.frozen).
+  function monthLocked(dateKey) { return !!(data.locks || {})[dateKey.slice(0, 7)]; }
+  // Rule violations if employee e works shift sid on day key (the rules live in SchedEngine).
+  function violationsAt(e, key, sid) { return SchedEngine.violations(schedCtx(), e, key, sid); }
+  // One plain-language line about the open slots of a generated month.
+  function shortageText(res) {
+    var n = 0, days = {}, sample = "";
+    res.short.forEach(function (d) {
+      days[d.date] = true;
+      d.items.forEach(function (it) {
+        n += it.n;
+        if (!sample) sample = faDigits(d.date) + " · " + it.shift + ": " + it.reasons.join("؛");
       });
     });
-    rulesOn("maxRun").forEach(function (r) {
-      if (r.kind !== "*" && r.kind !== kind) return;
-      var run = 1, d, v;
-      for (d = -1; d > -60; d--) { v = assignOf(keyDelta(key, d), e.id); if (!isWork(v) || (r.kind !== "*" && kindOf(v) !== r.kind)) break; run++; }
-      for (d = 1; d < 60; d++) { v = assignOf(keyDelta(key, d), e.id); if (!isWork(v) || (r.kind !== "*" && kindOf(v) !== r.kind)) break; run++; }
-      if (run > r.value) out.push({ rule: r, text: "بیش از " + faDigits(r.value) + " روز متوالی (" + faDigits(run) + " روز)" });
-    });
-    return out;
+    return n ? faDigits(n) + " خانه‌ی کمبود در " + faDigits(Object.keys(days).length) + " روز. علت نمونه: " + sample : "";
   }
   function hardOnly(list) { return list.filter(function (v) { return v.rule.mode === "hard"; }); }
 
-  function runFair(dateKey, gid) {
-    var st = fairStats(monthKeys(dateKey)), prior = fairStats(priorKeys(dateKey)), off = isOffDay(dateKey), dow = persianDow(dateKey);
-    var next = JSON.parse(JSON.stringify(data.assignments[dateKey] || {}));
-    var emps = liveEmployees().filter(function (e) { return e.active && (!gid || e.groupId === gid); }).sort(byName);
-    var picks = [], short = [];
-    var inScope = function (s) { return !gid || (s.groups || [])[0] === gid; };
-    // Fairness view: this month plus the two months before. Hour caps use this month only.
-    function combined(id) {
-      var c = st[id], p = prior[id], kinds = {}, lastKind = {};
-      if (!p) return c;
-      Object.keys(c.kinds).concat(Object.keys(p.kinds)).forEach(function (q) { kinds[q] = (c.kinds[q] || 0) + (p.kinds[q] || 0); });
-      Object.keys(c.lastKind).concat(Object.keys(p.lastKind)).forEach(function (q) {
-        var a = c.lastKind[q] || "", b = p.lastKind[q] || "";
-        lastKind[q] = a > b ? a : b;
-      });
-      var la = c.lastAny || "", lb = p.lastAny || "";
-      return { kinds: kinds, off: c.off + p.off, mins: c.mins + p.mins, lastKind: lastKind, lastAny: la > lb ? la : lb };
-    }
-    function fits(e, s) {
-      return !next[e.id] && allowedFor(s, e) && underCap(e, s, st[e.id]) && !hardOnly(violationsAt(e, dateKey, s.id)).length;
-    }
-    function place(e, s) {
-      next[e.id] = s.id;
-      var x = st[e.id], kind = kindOf(s.id);
-      x.shifts[s.id] = (x.shifts[s.id] || 0) + 1; x.kinds[kind] = (x.kinds[kind] || 0) + 1;
-      x.mins += shiftMins(s.id); if (off) x.off++; x.lastKind[kind] = dateKey;
-      if (dateKey > x.lastAny) x.lastAny = dateKey;
-      picks.push({ name: e.firstName + " " + e.lastName, shift: s.name });
-    }
-    function pick(list, s) {
-      var kind = kindOf(s.id);
-      list.sort(function (a, b) { return fairCompare({ e: a, x: combined(a.id) }, { e: b, x: combined(b.id) }, kind, off); });
-      return list[0];
-    }
-    // 1) hard group minimums first (e.g. a doctor on night shift)
-    rulesOn("minInGroup").filter(function (r) { return r.mode === "hard"; }).forEach(function (r) {
-      liveShifts().filter(inScope).forEach(function (s) {
-        if (!(r.kind === "*" || kindOf(s.id) === r.kind) || s.days.indexOf(dow) < 0) return;
-        if ((s.groups || [])[0] !== r.groupId) return;
-        var have = emps.filter(function (e) { return next[e.id] === s.id && e.groupId === r.groupId; }).length;
-        while (have < r.value) {
-          var cands = emps.filter(function (e) { return e.groupId === r.groupId && fits(e, s); });
-          if (!cands.length) break;
-          place(pick(cands, s), s); have++;
-        }
-        if (have < r.value) short.push({ shift: groupName(r.groupId) + " · " + s.name, n: r.value - have });
-      });
-    });
-    // 2) plain minimums per shift, filled from employees whose group shares the duty equally
-    liveShifts().filter(inScope).filter(function (s) { return s.min > 0 && s.days.indexOf(dow) >= 0; })
-      .sort(function (a, b) { return (a.mode === "mandatory" ? 0 : 1) - (b.mode === "mandatory" ? 0 : 1) || b.min - a.min; })
-      .forEach(function (s) {
-        var have = emps.filter(function (e) { return next[e.id] === s.id; }).length;
-        while (have < s.min) {
-          var cands = emps.filter(function (e) { return shareOf(e) && fits(e, s); });
-          if (!cands.length) break;
-          place(pick(cands, s), s); have++;
-        }
-        if (have < s.min) short.push({ shift: s.name, n: s.min - have });
-      });
-    return { next: next, picks: picks, short: short };
+  // Generates the open days of the month shown (the engine skips locked and past days).
+  // Waiting card while a suggestion runs. Every enabled rule is listed and ticked in turn as the engine checks it.
+  var BUSY_STEPS = ["بررسی قوانین سخت و فاصله‌ی استراحت", "محاسبه‌ی سهم هر نفر در سه ماه گذشته", "انتخاب عادلانه‌ی شیفت برای هر روز", "کنترل کمبود نیرو و ثبت علت"];
+  var BUSY_MIN_MS = 3400, BUSY_STEP_MS = 420;
+  var busyTimer = null, busyIdx = 0;
+  function busyPendingRows() {
+    return (data.rules || []).filter(function (r) { return r.enabled; }).map(function (r) { return r.label; }).concat(["حداقل نیروی شیفت‌ها"]);
   }
-  // Fills the empty slots of every day in the month, one day after another,
-  // so each day sees the shifts already given out earlier in the month.
-  async function fairMonth() {
-    var date = rosterKey(), keys = monthKeys(date), filled = 0, gid = rosterScope();
-    keys.forEach(function (k) {
-      var r = runFair(k, gid);
-      if (!r.picks.length) return;
-      if (Object.keys(r.next).length) data.assignments[k] = r.next; else delete data.assignments[k];
-      filled += r.picks.length;
-    });
-    state.rosterOk = false;
-    if (!filled) {
-      var gaps = keys.filter(function (k) { return shortFor(k).filter(function (x) { return !gid || x.gid === gid; }).length; }).length;
-      state.rosterMsg = gaps
-        ? "کمبود نیرو در " + faDigits(gaps) + " روز ماه؛ کارکنان مجاز و بی‌تخصیص کافی نیستند."
-        : "حداقل نیروی همه‌ی روزهای این ماه پر است؛ نیازی به تخصیص جدید نیست.";
-      refreshRoster(); return;
+  function busyHTML() {
+    var rows = busyPendingRows().map(function (label, i) {
+      return '<li class="busy-rule" id="busy-rule-' + i + '"><span class="busy-dot" aria-hidden="true"></span><span class="busy-rule-name">' + esc(label) + "</span><small>در حال بررسی…</small></li>";
+    }).join("");
+    return '<section class="card busy-card" role="status" aria-live="polite"><div class="busy-ring" aria-hidden="true"></div>' +
+      '<h2 class="busy-title">در حال پیشنهاد عادلانه و بررسی قوانین</h2><p class="busy-step" id="busy-step">' + BUSY_STEPS[0] + '…</p>' +
+      '<ul class="busy-rules">' + rows + "</ul><div class=\"busy-bar\" aria-hidden=\"true\"><i></i></div></section>";
+  }
+  function startBusyTicker() {
+    stopBusyTicker(); busyIdx = 0;
+    busyTimer = setInterval(function () {
+      busyIdx = (busyIdx + 1) % BUSY_STEPS.length;
+      var el = document.getElementById("busy-step");
+      if (el) el.textContent = BUSY_STEPS[busyIdx] + "…";
+    }, 900);
+  }
+  function stopBusyTicker() { if (busyTimer) clearInterval(busyTimer); busyTimer = null; }
+  function paintFrame() { return new Promise(function (res) { requestAnimationFrame(function () { setTimeout(res, 30); }); }); }
+  function sleep(ms) { return new Promise(function (res) { setTimeout(res, ms); }); }
+  // Ticks each row with the real result of its rule, then keeps the card up for the minimum time.
+  async function animateRules(report, started) {
+    for (var i = 0; i < report.rows.length; i++) {
+      await sleep(BUSY_STEP_MS);
+      var row = report.rows[i], el = document.getElementById("busy-rule-" + i);
+      if (!el) continue;
+      var bad = row.count > 0, cls = !bad ? "is-ok" : row.mode === "hard" ? "is-bad" : "is-warn";
+      el.classList.add(cls);
+      el.querySelector("small").textContent = !bad ? "بدون مورد" : faDigits(row.count) + " مورد" + (row.sample ? " · " + row.sample : "");
     }
+    var wait = BUSY_MIN_MS - (Date.now() - started);
+    if (wait > 0) await sleep(wait);
+  }
+  async function fairMonth() {
+    if (monthLocked(rosterKey())) return runFairMonth();
+    state.rosterBusy = true; startBusyTicker(); refreshRoster(); await paintFrame();
+    var started = Date.now();
+    try { await runFairMonth(); }
+    catch (err) { state.rosterMsg = "پیشنهاد انجام نشد؛ دوباره تلاش کنید."; }
+    var report = SchedEngine.ruleReport(schedCtx(), monthKeys(rosterKey()));
+    await animateRules(report, started);
+    state.rosterBusy = false; stopBusyTicker(); refreshRoster();
+  }
+  // Generates the open days of the month shown (the engine skips locked and past days).
+  async function runFairMonth() {
+    var date = rosterKey(), gid = rosterScope();
+    state.rosterOk = false;
+    if (monthLocked(date)) { state.rosterMsg = "این ماه تأیید نهایی شده است؛ برای پیشنهاد دوباره ابتدا قفل را بردارید."; return refreshRoster(); }
+    var work = JSON.parse(JSON.stringify(data.assignments));
+    // Past days cannot change: when the chosen day is in the past, the suggestion starts from today, and says so.
+    var start = date, pastNote = "";
+    var res = SchedEngine.generateMonth(schedCtx(work), date, gid, start);
+    var note = (res.frozenDays.length ? " " + faDigits(res.frozenDays.length) + " روز گذشته دست‌نخورده ماند." : "") +
+      (res.removedExempt ? " " + faDigits(res.removedExempt) + " تخصیص که با معافیت تداخل داشت حذف شد." : "");
+    if (!res.filled) {
+      var none = shortageText(res);
+      state.rosterMsg = pastNote + (none ? "تخصیص جدیدی از " + faDigits(start) + " به بعد ممکن نشد. " + none : "حداقل نیروی همه‌ی روزهای باز این ماه پر است؛ نیازی به تخصیص جدید نیست.") + note;
+      return refreshRoster();
+    }
+    data.assignments = work;
     try {
       await kvSet(K_ASSIGN, data.assignments);
-      await logAudit("پیشنهاد عادلانه", "برنامه ماهانه", faDigits(date.slice(0, 7)) + ": " + faDigits(filled) + " تخصیص");
-      var left = keys.reduce(function (n, k) { return n + shortFor(k).length; }, 0);
+      await logAudit("پیشنهاد عادلانه", "برنامه ماهانه", faDigits(date.slice(0, 7)) + ": " + faDigits(res.filled) + " تخصیص");
+      var left = shortageText(res);
       state.rosterOk = true;
-      state.rosterMsg = faDigits(filled) + " تخصیص برای این ماه ثبت شد." + (left ? " هنوز " + faDigits(left) + " کمبود باقی مانده است." : " همه‌ی حداقل‌های ماه پر شد.");
+      state.rosterMsg = pastNote + faDigits(res.filled) + " تخصیص از " + faDigits(start) + " به بعد ثبت شد." + (left ? " " + left + "." : " همه‌ی حداقل‌های روزهای باز پر شد.") + note;
     } catch (err) {
       data.assignments = (await kvGet(K_ASSIGN)) || {};
       state.rosterMsg = "ذخیره‌سازی ناموفق بود.";
     }
+    refreshRoster();
+  }
+  // Manager approval: a locked month cannot be regenerated, cleared or edited by hand.
+  async function lockMonth(on) {
+    var mk = rosterKey().slice(0, 7);
+    data.locks = data.locks || {};
+    if (on) data.locks[mk] = { at: new Date().toISOString() }; else delete data.locks[mk];
+    try {
+      await kvSet(K_LOCKS, data.locks);
+      await logAudit(on ? "تأیید نهایی" : "برداشتن قفل", "برنامه ماهانه", faDigits(mk));
+      state.rosterOk = true;
+      state.rosterMsg = on ? "برنامه " + faDigits(mk) + " تأیید نهایی شد و دیگر با پیشنهاد یا تغییر دستی عوض نمی‌شود." : "قفل ماه " + faDigits(mk) + " برداشته شد.";
+    } catch (err) {
+      data.locks = (await kvGet(K_LOCKS)) || {};
+      state.rosterOk = false; state.rosterMsg = "ذخیره‌سازی ناموفق بود.";
+    }
+    refreshRoster();
+  }
+  // Re-checks the whole month as saved: hard and soft rule breaks, open minimums, and both fairness levels.
+  function validateRoster() {
+    var date = rosterKey(), ctx = schedCtx(), keys = monthKeys(date);
+    // Fairness is judged over three months (this month and the two before), as the spec asks.
+    var chk = SchedEngine.check(ctx, keys), fr = SchedEngine.fairness(ctx, priorKeys(date).concat(keys));
+    var open = chk.short.reduce(function (n, x) { return n + x.n; }, 0);
+    var o = fr.overall;
+    var parts = [
+      chk.hard.length ? faDigits(chk.hard.length) + " نقض قانون سخت" : "بدون نقض قانون سخت",
+      faDigits(chk.soft.length) + " هشدار نرم",
+      open ? faDigits(open) + " کمبود نیرو" : "بدون کمبود نیرو",
+      "عدالت کلی سه ماهه: انحراف " + faDigits(Math.round(o.pct * 100)) + "٪ (از " + faDigits(Math.round(o.min)) + " تا " + faDigits(Math.round(o.max)) + " ساعت)"
+    ];
+    fr.groups.forEach(function (g) { parts.push("گروه «" + g.name + "»: انحراف " + faDigits(Math.round(g.stat.pct * 100)) + "٪"); });
+    if (chk.hard.length) parts.push("نمونه: " + chk.hard.slice(0, 3).map(function (x) { return faDigits(x.date) + " · " + x.name + ": " + x.text; }).join("؛"));
+    state.rosterOk = !chk.hard.length;
+    state.rosterMsg = parts.join("؛ ") + ".";
     refreshRoster();
   }
 
@@ -1841,15 +2466,38 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     return '<span class="fair-ok">در محدوده</span>';
   }
   // ---------- reports: ten monthly reports, shown on screen, printed/PDF, or exported to Excel ----------
-  var REPORT_TYPES = [["plan", "برنامه ماهانه"], ["work", "کارکرد هر کارمند"], ["hours", "ساعات کاری"], ["fair", "عدالت"], ["night", "شیفت شب"], ["friday", "جمعه‌کاری"], ["holiday", "تعطیلات"], ["relief", "ریلیف"], ["leave", "مرخصی"], ["attend", "حضور و غیاب"]];
+  var REPORT_TYPES = [["calendar", "برنامه تقویمی"], ["employee", "شیفت‌های هر کارمند"], ["work", "کارکرد هر کارمند"], ["hours", "ساعات کاری"], ["fair", "عدالت"], ["relief", "ریلیف"], ["leave", "مرخصی"], ["attend", "حضور و غیاب"]];
   function reportTitle(t) { var f = REPORT_TYPES.filter(function (x) { return x[0] === t; })[0]; return f ? f[1] : "گزارش"; }
   function repDay(k) { return faDigits(k.slice(8)) + " " + DOW_LETTERS[persianDow(k)]; }
   function repCount(e, keys, pred) { return keys.filter(function (k) { return pred(assignOf(k, e.id), k); }).length; }
   function repList(e, keys, pred) { return keys.filter(function (k) { return pred(assignOf(k, e.id), k); }).map(function (k) { return faDigits(k.slice(5)); }).join("، ") || "—"; }
-  function reportTable(type, key) {
-    var keys = monthKeys(key), st = fairStats(keys), groups = liveGroups();
-    var emps = liveEmployees().filter(function (e) { return e.active; }).sort(byName);
+  function weekKeys(key) {
+    var out = [], i;
+    for (i = 0; i < 7; i++) out.push(keyDelta(key, i));
+    return out;
+  }
+  function reportKey() { return state.reportDate || rosterKey(); }
+  function reportKeysFor(type, key) { return type === "weekly" ? weekKeys(key) : monthKeys(key); }
+  function reportPeriod(type, key) {
+    if (type === "weekly") { var w = weekKeys(key); return friendlyJ(w[0]) + " تا " + friendlyJ(w[6]); }
+    var a = key.split("/").map(Number);
+    return "ماه " + PMONTHS[a[1] - 1] + " " + faDigits(a[0]);
+  }
+  function reportGroups() {
+    var sel = state.reportGroup;
+    return liveGroups().filter(function (g) { return !sel || sel === "all" || g.id === sel; });
+  }
+  function repCell(v) {
+    if (v === LEAVE) return { t: "مرخصی", k: "k-leave" };
+    if (isWork(v)) { var s = shiftById(v); return { t: s ? s.name.split(" · ")[0] : "—", k: kindClass(v) }; }
+    return { t: "—", k: "" };
+  }
+  function repText(c) { return c && typeof c === "object" ? c.t : c; }
+  function reportTable(type, key, gid) {
+    var keys = reportKeysFor(type, key), st = fairStats(keys);
     var hol = data.holidays || [];
+    var emps = liveEmployees().filter(function (e) { return e.active && (!gid || e.groupId === gid); }).sort(byName);
+    var groups = gid ? liveGroups().filter(function (g) { return g.id === gid; }) : liveGroups();
     var out = { title: reportTitle(type), note: "", head: [], rows: [] };
     var nm = function (e) { return e.firstName + " " + e.lastName; };
     var gn = function (e) { return groupName(e.groupId); };
@@ -1859,9 +2507,9 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     var isHol = function (v, k) { return isWork(v) && hol.indexOf(k) >= 0; };
     var isLeave = function (v) { return v === LEAVE; };
     switch (type) {
-      case "plan":
+      case "plan": case "weekly":
         out.head = ["کارمند"].concat(keys.map(repDay));
-        out.rows = emps.map(function (e) { return [nm(e)].concat(keys.map(function (k) { var v = assignOf(k, e.id); return v === LEAVE ? "مرخصی" : isWork(v) ? shiftById(v).name : "—"; })); });
+        out.rows = emps.map(function (e) { return [nm(e)].concat(keys.map(function (k) { return repCell(assignOf(k, e.id)); })); });
         break;
       case "work":
         out.head = ["کارمند", "گروه"].concat(SHIFT_KINDS.map(function (x) { return x[1]; }), ["کل شیفت", "ساعت", "جمعه‌کاری", "تعطیل رسمی", "مرخصی"]);
@@ -1881,13 +2529,13 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
         out.note = groups.map(function (g) {
           var mem = emps.filter(function (e) { return e.groupId === g.id; });
           var tot = mem.reduce(function (a, e) { return a + st[e.id].mins / 60; }, 0);
-          return g.name + ": " + faDigits(Math.round(tot)) + " ساعت";
+          return faDigits(Math.round(tot)) + " ساعت کل";
         }).join(" · ");
         break;
       case "fair": {
         out.head = ["کارمند", "گروه"].concat(SHIFT_KINDS.map(function (x) { return x[1]; }), ["ساعت", "روز تعطیل", "انحراف", "وضعیت"]);
         var agg = {};
-        emps.forEach(function (e) { if (!shareOf(e)) return; var g = agg[e.groupId] || (agg[e.groupId] = { sum: 0, n: 0 }); g.sum += st[e.id].mins; g.n++; });
+        liveEmployees().filter(function (e) { return e.active; }).forEach(function (e) { if (!shareOf(e)) return; var g = agg[e.groupId] || (agg[e.groupId] = { sum: 0, n: 0 }); g.sum += st[e.id].mins; g.n++; });
         out.rows = emps.map(function (e) {
           var x = st[e.id], g = agg[e.groupId], avg = g && g.n ? g.sum / g.n : 0, dev = avg && shareOf(e) ? (x.mins - avg) / avg : 0;
           var status = !shareOf(e) ? "معاف" : Math.abs(dev) <= FAIR_TOL ? "نزدیک میانگین" : dev > 0 ? "بالاتر از میانگین" : "پایین‌تر از میانگین";
@@ -1901,7 +2549,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
         var label = type === "leave" ? "روز مرخصی" : type === "holiday" ? "روز تعطیل کاری" : "تعداد";
         out.head = ["کارمند", "گروه", label, "تاریخ‌ها"];
         out.rows = emps.map(function (e) { return [nm(e), gn(e), faDigits(repCount(e, keys, pred)), repList(e, keys, pred)]; });
-        if (type === "holiday" && !keys.some(function (k) { return hol.indexOf(k) >= 0; })) out.note = "در این ماه تعطیل رسمی ثبت نشده است. فهرست تعطیلات را در تب قوانین وارد کنید.";
+        if (type === "holiday" && !keys.some(function (k) { return hol.indexOf(k) >= 0; })) out.note = "در این دوره تعطیل رسمی ثبت نشده است. فهرست تعطیلات را در تب قوانین وارد کنید.";
         break;
       }
       case "attend":
@@ -1910,45 +2558,254 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
           var w = repCount(e, keys, function (v) { return isWork(v); }), l = repCount(e, keys, isLeave);
           return [nm(e), gn(e), faDigits(w), faDigits(l), faDigits(keys.length - w - l), faDigits(Math.round(st[e.id].mins / 60))];
         });
-        out.note = "بر اساس برنامه ماهانه است. ورود و خروج واقعی هنوز ثبت نمی‌شود.";
+        out.note = "بر اساس برنامه است. ورود و خروج واقعی هنوز ثبت نمی‌شود.";
         break;
     }
     return out;
   }
+  function reportSections(type, key) {
+    if (type === "employee") { var one = employeeKey(); return one ? [{ g: { name: one.firstName + " " + one.lastName }, t: employeeTable(one, monthKeys(key)) }] : []; }
+    return reportGroups().map(function (g) { return { g: g, t: reportTable(type, key, g.id) }; });
+  }
+  function repTableHTML(t) {
+    var cellHTML = function (c, i) {
+      if (i === 0) return "<th>" + esc(c) + "</th>";
+      if (c && typeof c === "object") return '<td><span class="rs-chip ' + c.k + '">' + esc(c.t) + "</span></td>";
+      return "<td>" + esc(c) + "</td>";
+    };
+    return '<div class="fair-wrap"><table class="fair-table rs-table"><thead><tr>' + t.head.map(function (x) { return "<th>" + esc(x) + "</th>"; }).join("") + "</tr></thead><tbody>" +
+      (t.rows.length ? t.rows.map(function (r) { return "<tr>" + r.map(cellHTML).join("") + "</tr>"; }).join("") : '<tr><td colspan="' + t.head.length + '">کارمند فعالی در این گروه ثبت نشده است.</td></tr>') +
+      "</tbody></table></div>" + (t.note ? '<p class="hint rs-note">' + esc(t.note) + "</p>" : "");
+  }
+  var PLAN_KIND_ORDER = ["morning", "evening", "night", "relief", "other"];
+  function calendarGridHTML(gid, keys) {
+    var hol = data.holidays || [];
+    var emps = liveEmployees().filter(function (e) { return e.active && e.groupId === gid; }).sort(byName);
+    var shifts = liveShifts().filter(function (s) { return (s.groups || [])[0] === gid; }).sort(function (a, b) {
+      var d = PLAN_KIND_ORDER.indexOf(kindOf(a.id)) - PLAN_KIND_ORDER.indexOf(kindOf(b.id));
+      return d || shiftSpan(a).a - shiftSpan(b).a;
+    });
+    var cells = [], i;
+    for (i = 0; i < persianDow(keys[0]); i++) cells.push(null);
+    keys.forEach(function (k) { cells.push(k); });
+    while (cells.length % 7) cells.push(null);
+    var cellHTML = function (k) {
+      if (!k) return '<td class="cg-empty"></td>';
+      var cls = (persianDow(k) === 6 ? " cg-fri" : "") + (hol.indexOf(k) >= 0 ? " cg-hol" : "");
+      var blocks = shifts.map(function (s) {
+        var list = emps.filter(function (e) { return assignOf(k, e.id) === s.id; });
+        return list.length ? '<div class="cg-blk ' + kindClass(s.id) + '"><b>' + esc(s.name.split(" · ")[0]) + ":</b> " + list.map(function (e) { return esc(e.firstName + " " + e.lastName); }).join("، ") + "</div>" : "";
+      }).join("");
+      var leave = emps.filter(function (e) { return assignOf(k, e.id) === LEAVE; });
+      if (leave.length) blocks += '<div class="cg-blk k-leave"><b>مرخصی:</b> ' + leave.map(function (e) { return esc(e.firstName + " " + e.lastName); }).join("، ") + "</div>";
+      return '<td class="cg-cell' + cls + '"><div class="cg-day">' + faDigits(k.slice(8)) + "</div>" + blocks + "</td>";
+    };
+    var head = "<thead><tr>" + DOW_NAMES.map(function (n) { return "<th>" + esc(n) + "</th>"; }).join("") + "</tr></thead>";
+    var rows = "";
+    for (i = 0; i < cells.length; i += 7) rows += "<tr>" + cells.slice(i, i + 7).map(cellHTML).join("") + "</tr>";
+    return '<table class="cg-table">' + head + "<tbody>" + rows + "</tbody></table>";
+  }
+  function sheetShell(title, period, inner) {
+    var name = state.clinicName || "کلین‌بان";
+    return '<section class="card report-sheet"><header class="rs-head"><span class="rs-logo">' + LOGO + '</span><div><b class="rs-name">' + esc(name) + "</b><small>" + esc(title) + " · " + esc(period) + "</small></div></header>" + inner +
+      '<div class="rs-sign"><span>مهر و امضای مدیر کلینیک</span><span>امضا: ____________________</span></div>' +
+      '<footer class="rs-foot"><span>' + esc(name) + " · " + esc(title) + '</span><span>تاریخ چاپ: ' + esc(longDate(utcNoon(new Date()))) + "</span></footer></section>";
+  }
+  function groupBar(g, count) {
+    return '<div class="rs-group"><span class="gc" style="--gc:' + groupColor(g.id) + '"></span><b>' + esc(g.name) + "</b><small>" + faDigits(count) + " نفر</small></div>";
+  }
+  function staffCount(gid) { return liveEmployees().filter(function (e) { return e.active && e.groupId === gid; }).length; }
+  function dayCardsHTML(gid, key) {
+    var emps = liveEmployees().filter(function (e) { return e.active && e.groupId === gid; }).sort(byName);
+    var shifts = liveShifts().filter(function (s) { return (s.groups || [])[0] === gid; }).sort(function (a, b) {
+      var d = PLAN_KIND_ORDER.indexOf(kindOf(a.id)) - PLAN_KIND_ORDER.indexOf(kindOf(b.id));
+      return d || shiftSpan(a).a - shiftSpan(b).a;
+    });
+    var cards = shifts.map(function (s) {
+      var list = emps.filter(function (e) { return assignOf(key, e.id) === s.id; }), sp = shiftSpan(s);
+      var short = s.mode === "mandatory" && s.min > 0 && list.length < s.min;
+      return '<div class="dc-card ' + kindClass(s.id) + (short ? " dc-short" : "") + '"><div class="dc-h"><b>' + esc(s.name.split(" · ")[0]) + "</b><small>" + hmText(sp.a) + " – " + hmText(sp.b) + "</small></div>" +
+        '<div class="dc-names">' + (list.length ? list.map(function (e) { return esc(e.firstName + " " + e.lastName); }).join("<br>") : '<span class="hint">کسی تخصیص نیافته</span>') + "</div>" +
+        '<small class="dc-n">' + faDigits(list.length) + (s.min ? " از حداقل " + faDigits(s.min) : "") + (short ? " · کمبود" : "") + "</small></div>";
+    });
+    var leave = emps.filter(function (e) { return assignOf(key, e.id) === LEAVE; });
+    if (leave.length) cards.push('<div class="dc-card k-leave"><div class="dc-h"><b>مرخصی</b></div><div class="dc-names">' + leave.map(function (e) { return esc(e.firstName + " " + e.lastName); }).join("<br>") + "</div></div>");
+    return cards.length ? '<div class="dc-grid">' + cards.join("") + "</div>" : '<p class="hint">شیفتی برای این روز تعریف نشده است.</p>';
+  }
+  function calendarSheetsHTML(view, key) {
+    var title = reportTitle("calendar"), a = key.split("/").map(Number), month = "ماه " + PMONTHS[a[1] - 1] + " " + faDigits(a[0]);
+    var groups = reportGroups().filter(function (g) { return staffCount(g.id) > 0; });
+    if (!groups.length) return sheetShell(title, month, '<p class="hint">گروهی برای نمایش وجود ندارد.</p>');
+    // Day and week views use the same calendar grid as the monthly view, so the shape stays identical.
+    if (view === "day") return groups.map(function (g) { return sheetShell(title, "روز " + friendlyJ(key), groupBar(g, staffCount(g.id)) + calendarGridHTML(g.id, [key])); }).join("");
+    if (view === "week") {
+      var wk = weekKeys(keyDelta(key, -persianDow(key))); // week runs Saturday to Friday, like the monthly grid
+      return groups.map(function (g) { return sheetShell(title, "هفته " + friendlyJ(wk[0]) + " تا " + friendlyJ(wk[6]), groupBar(g, staffCount(g.id)) + calendarGridHTML(g.id, wk)); }).join("");
+    }
+    var all = monthKeys(key), half = Math.min(15, all.length);
+    var halves = [
+      { label: "نیمه‌ی اول: " + friendlyJ(all[0]) + " تا " + friendlyJ(all[half - 1]), keys: all.slice(0, half) },
+      { label: "نیمه‌ی دوم: " + friendlyJ(all[half]) + " تا " + friendlyJ(all[all.length - 1]), keys: all.slice(half) }
+    ].filter(function (h) { return h.keys.length; });
+    return groups.map(function (g) {
+      return halves.map(function (h) { return sheetShell(title, month + " · " + h.label, groupBar(g, staffCount(g.id)) + calendarGridHTML(g.id, h.keys)); }).join("");
+    }).join("");
+  }
+  function planGridHTML(gid, keys) {
+    var emps = liveEmployees().filter(function (e) { return e.active && e.groupId === gid; }).sort(byName);
+    var shifts = liveShifts().filter(function (s) { return (s.groups || [])[0] === gid; }).sort(function (a, b) {
+      var d = PLAN_KIND_ORDER.indexOf(kindOf(a.id)) - PLAN_KIND_ORDER.indexOf(kindOf(b.id));
+      return d || shiftSpan(a).a - shiftSpan(b).a;
+    });
+    if (!shifts.length) return '<p class="hint">برای این گروه شیفتی تعریف نشده است.</p>';
+    var rows = shifts.map(function (s) {
+      return { label: s.name.split(" · ")[0], k: kindClass(s.id), id: s.id };
+    });
+    rows.push({ label: "مرخصی", k: "k-leave", id: LEAVE });
+    var head = "<tr><th>شیفت</th>" + keys.map(function (k) { return "<th>" + esc(repDay(k)) + "</th>"; }).join("") + "</tr>";
+    var body = rows.map(function (r) {
+      return "<tr><th><span class=\"rs-chip " + r.k + "\">" + esc(r.label) + "</span></th>" + keys.map(function (k) {
+        var list = emps.filter(function (e) { return assignOf(k, e.id) === r.id; });
+        return '<td class="' + r.k + '">' + (list.length ? list.map(function (e) { return esc(e.firstName + " " + e.lastName); }).join("<br>") : "—") + "</td>";
+      }).join("") + "</tr>";
+    }).join("");
+    return '<div class="fair-wrap"><table class="fair-table rs-table rs-grid"><thead>' + head + "</thead><tbody>" + body + "</tbody></table></div>";
+  }
+  function employeeKey() {
+    var list = liveEmployees().filter(function (e) { return e.active; }).sort(byName);
+    return list.filter(function (e) { return e.id === state.reportEmp; })[0] || list[0] || null;
+  }
+  function employeeTable(e, keys) {
+    var hol = data.holidays || [];
+    return {
+      head: ["روز", "شیفت", "مدت", "وضعیت"], note: "",
+      rows: keys.map(function (k) {
+        var v = assignOf(k, e.id), dw = persianDow(k), mins = isWork(v) ? shiftMins(v) : 0, shift = isWork(v) ? shiftById(v) : null;
+        var status = v === LEAVE ? "مرخصی" : isWork(v) ? (dw === 6 ? "جمعه‌کاری" : hol.indexOf(k) >= 0 ? "تعطیل رسمی" : "کاری") : "—";
+        return [faDigits(k.slice(8)) + " " + DOW_NAMES[dw],
+          shift ? { t: shift.name.split(" · ")[0], k: kindClass(v) } : { t: v === LEAVE ? "مرخصی" : "—", k: v === LEAVE ? "k-leave" : "" },
+          mins ? hmText(mins) : "—", status];
+      })
+    };
+  }
+  function empFieldHTML() {
+    var list = liveEmployees().filter(function (e) { return e.active; }).sort(byName), cur = employeeKey();
+    return '<label class="field" for="rep-emp"><span>کارمند</span><select class="control" id="rep-emp" data-report-emp>' +
+      list.map(function (e) { return '<option value="' + esc(e.id) + '"' + (cur && cur.id === e.id ? " selected" : "") + ">" + esc(e.firstName + " " + e.lastName) + "</option>"; }).join("") + "</select></label>";
+  }
+  // Same calendar grid as the group calendar, showing only this person's shift and leave on each day.
+  function employeeGridHTML(e, keys) {
+    var hol = data.holidays || [], cells = [], i;
+    for (i = 0; i < persianDow(keys[0]); i++) cells.push(null);
+    keys.forEach(function (k) { cells.push(k); });
+    while (cells.length % 7) cells.push(null);
+    var cellHTML = function (k) {
+      if (!k) return '<td class="cg-empty"></td>';
+      var cls = (persianDow(k) === 6 ? " cg-fri" : "") + (hol.indexOf(k) >= 0 ? " cg-hol" : ""), v = assignOf(k, e.id), blk = "", s, sp;
+      if (v === LEAVE) blk = '<div class="cg-blk k-leave"><b>مرخصی</b></div>';
+      else if (isWork(v) && shiftById(v)) {
+        s = shiftById(v); sp = shiftSpan(s);
+        blk = '<div class="cg-blk ' + kindClass(v) + '"><b>' + esc(s.name.split(" · ")[0]) + ":</b> " + hmText(sp.a) + " – " + hmText(sp.b) + "</div>";
+      }
+      return '<td class="cg-cell' + cls + '"><div class="cg-day">' + faDigits(k.slice(8)) + "</div>" + blk + "</td>";
+    };
+    var head = "<thead><tr>" + DOW_NAMES.map(function (n) { return "<th>" + esc(n) + "</th>"; }).join("") + "</tr></thead>";
+    var rows = "";
+    for (i = 0; i < cells.length; i += 7) rows += "<tr>" + cells.slice(i, i + 7).map(cellHTML).join("") + "</tr>";
+    return '<table class="cg-table emp-grid">' + head + "<tbody>" + rows + "</tbody></table>";
+  }
+  function employeeSheetHTML(key) {
+    var title = reportTitle("employee"), view = state.calView || "month", e = employeeKey(), keys, period;
+    if (view === "day") { keys = [key]; period = "روز " + friendlyJ(key); }
+    else if (view === "week") { keys = weekKeys(keyDelta(key, -persianDow(key))); period = "هفته " + friendlyJ(keys[0]) + " تا " + friendlyJ(keys[6]); }
+    else { keys = monthKeys(key); var a = key.split("/").map(Number); period = "ماه " + PMONTHS[a[1] - 1] + " " + faDigits(a[0]); }
+    if (!e) return sheetShell(title, period, '<p class="hint">کارمند فعالی ثبت نشده است.</p>');
+    var work = keys.filter(function (k) { return isWork(assignOf(k, e.id)); }), leave = keys.filter(function (k) { return assignOf(k, e.id) === LEAVE; }).length;
+    var mins = work.reduce(function (sum, k) { return sum + shiftMins(assignOf(k, e.id)); }, 0);
+    var stats = '<div class="rs-stats"><div class="rs-tile"><small>روزهای کاری</small><b>' + faDigits(work.length) + '</b></div><div class="rs-tile"><small>ساعت کل</small><b>' + faDigits(Math.round(mins / 60)) + '</b></div><div class="rs-tile"><small>روز مرخصی</small><b>' + faDigits(leave) + '</b></div><div class="rs-tile rs-tile-wide"><small>کارمند</small><b>' + esc(e.firstName + " " + e.lastName) + " · " + esc(groupName(e.groupId)) + "</b></div></div>";
+    var grids;
+    if (view === "month") {
+      var half = Math.min(15, keys.length);
+      grids = [{ label: "نیمه‌ی اول: " + friendlyJ(keys[0]) + " تا " + friendlyJ(keys[half - 1]), keys: keys.slice(0, half) }, { label: "نیمه‌ی دوم: " + friendlyJ(keys[half]) + " تا " + friendlyJ(keys[keys.length - 1]), keys: keys.slice(half) }]
+        .filter(function (h) { return h.keys.length; }).map(function (h) { return '<div class="rs-group"><b>' + esc(h.label) + "</b></div>" + employeeGridHTML(e, h.keys); }).join("");
+    } else grids = employeeGridHTML(e, keys);
+    return sheetShell(title, period + " · " + e.firstName + " " + e.lastName + " · " + groupName(e.groupId), stats + grids);
+  }
   function reportSheetHTML(type, key) {
-    var t = reportTable(type, key), name = state.clinicName || "کلین‌بان";
-    return '<section class="card report-sheet"><header class="rs-head"><span class="rs-logo">' + LOGO + '</span><div><b class="rs-name">' + esc(name) + '</b><small>' + esc(t.title) + " · ماه " + esc(faDigits(key.slice(0, 7))) + "</small></div></header>" +
-      '<div class="fair-wrap"><table class="fair-table rs-table"><thead><tr>' + t.head.map(function (x) { return "<th>" + esc(x) + "</th>"; }).join("") + "</tr></thead><tbody>" +
-      (t.rows.length ? t.rows.map(function (r) { return "<tr>" + r.map(function (c, i) { return i === 0 ? "<th>" + esc(c) + "</th>" : "<td>" + esc(c) + "</td>"; }).join("") + "</tr>"; }).join("") : '<tr><td colspan="' + t.head.length + '">کارمند فعالی ثبت نشده است.</td></tr>') +
-      "</tbody></table></div>" + (t.note ? '<p class="hint rs-note">' + esc(t.note) + "</p>" : "") + "</section>";
+    if (type === "employee") return employeeSheetHTML(key);
+    if (type === "calendar") return calendarSheetsHTML(state.calView || "month", key);
+    return reportSheetTableHTML(type, key);
+  }
+  function reportSheetTableHTML(type, key) {
+    var secs = reportSections(type, key), period = reportPeriod(type, key);
+    var people = secs.reduce(function (a, s) { return a + s.t.rows.length; }, 0);
+    var stats = '<div class="rs-stats"><div class="rs-tile"><small>کارمندان</small><b>' + faDigits(people) + '</b></div><div class="rs-tile"><small>گروه‌ها</small><b>' + faDigits(secs.length) + '</b></div><div class="rs-tile"><small>روزهای دوره</small><b>' + faDigits(reportKeysFor(type, key).length) + '</b></div><div class="rs-tile rs-tile-wide"><small>دوره‌ی گزارش</small><b>' + esc(period) + "</b></div></div>";
+    var body = secs.length ? secs.map(function (s) { return groupBar(s.g, s.t.rows.length) + repTableHTML(s.t); }).join("") : '<p class="hint">گروهی برای نمایش وجود ندارد.</p>';
+    return sheetShell(reportTitle(type), period, stats + body);
   }
   function reportsHTML() {
-    var key = rosterKey(), type = state.reportType || "plan";
+    var key = reportKey(), type = REPORT_TYPES.some(function (x) { return x[0] === state.reportType; }) ? state.reportType : "calendar", view = state.calView || "month", sel = state.reportGroup || "all";
     var opts = REPORT_TYPES.map(function (x) { return '<option value="' + x[0] + '"' + (x[0] === type ? " selected" : "") + ">" + x[1] + "</option>"; }).join("");
-    return '<div class="rep-bar"><label class="field" for="rep-type"><span>نوع گزارش</span><select class="control" id="rep-type" data-report-type>' + opts + "</select></label>" +
+    var gopts = '<option value="all">همه گروه‌ها (هر گروه جدا)</option>' + liveGroups().map(function (g) { return '<option value="' + esc(g.id) + '"' + (sel === g.id ? " selected" : "") + ">" + esc(g.name) + "</option>"; }).join("");
+    var pick = type === "employee" ? empFieldHTML() : '<label class="field" for="rep-group"><span>گروه</span><select class="control" id="rep-group" data-report-group>' + gopts + "</select></label>";
+    var vopts = [["month", "ماهانه"], ["week", "هفتگی"], ["day", "روزانه"]].map(function (x) { return '<option value="' + x[0] + '"' + (view === x[0] ? " selected" : "") + ">" + x[1] + "</option>"; }).join("");
+    var viewField = type === "calendar" || type === "employee" ? '<label class="field" for="cal-view"><span>نمای تقویم</span><select class="control" id="cal-view" data-cal-view>' + vopts + "</select></label>" : "";
+    var timed = type === "calendar" || type === "employee";
+    var dateLabel = timed && view === "day" ? "روز گزارش" : timed && view === "week" ? "هفته (هر روزی از هفته)" : "ماه گزارش (هر روزی از ماه)";
+    return '<div class="rep-bar"><label class="field" for="rep-type"><span>نوع گزارش</span><select class="control" id="rep-type" data-report-type>' + opts + "</select></label>" + pick + viewField +
+      '<div class="roster-date">' + dateFieldHTML("report-date", dateLabel, key, {}) + "</div>" +
       '<div class="rep-actions"><button type="button" class="btn" data-action="report-print">PDF و چاپ</button><button type="button" class="btn ghost" data-action="report-xls">Excel</button></div></div>' +
-      '<p class="hint">ماه گزارش از برنامه ماهانه انتخاب می‌شود. برای PDF در پنجره چاپ گزینه «ذخیره به‌صورت PDF» را انتخاب کنید.</p>' + reportSheetHTML(type, key);
+      '<p class="hint">گزارش‌ها رسمی و قابل چاپ هستند. برای PDF در پنجره‌ی چاپ گزینه‌ی «ذخیره به‌صورت PDF» را انتخاب کنید.</p>' +
+      '<div class="rs-wrap">' + reportSheetHTML(type, key) + "</div>";
+  }
+  // Latin file name for every saved report (PDF default name and Excel download)
+  // Persian letters to Latin, used only when the employee has no Latin name typed in.
+  var FA_LATIN = { "ا": "a", "آ": "a", "ب": "b", "پ": "p", "ت": "t", "ث": "s", "ج": "j", "چ": "ch", "ح": "h", "خ": "kh", "د": "d", "ذ": "z", "ر": "r", "ز": "z", "ژ": "zh", "س": "s", "ش": "sh", "ص": "s", "ض": "z", "ط": "t", "ظ": "z", "ع": "a", "غ": "gh", "ف": "f", "ق": "gh", "ک": "k", "ك": "k", "گ": "g", "ل": "l", "م": "m", "ن": "n", "و": "v", "ه": "h", "ی": "i", "ي": "i", "ئ": "i", "ؤ": "o", "ء": "" };
+  function latinNameOf(e) {
+    var raw = e.latinName || (e.firstName || "") + " " + (e.lastName || ""), out = "";
+    raw.split("").forEach(function (c) {
+      if (Object.prototype.hasOwnProperty.call(FA_LATIN, c)) out += FA_LATIN[c];
+      else if (/[A-Za-z0-9]/.test(c)) out += c;
+      else out += " ";
+    });
+    return out.trim().replace(/\s+/g, "-") || "employee";
+  }
+  function reportFileName(type, key, emp) {
+    var safeType = REPORT_TYPES.some(function (x) { return x[0] === type; }) ? type : "calendar";
+    var who = safeType === "employee" && emp ? "-" + latinNameOf(emp) : "";
+    return "clinic-" + safeType + who + "-" + normDigits(key).replace(/[^0-9]+/g, "-").replace(/^-|-$/g, "");
+  }
+  function printReport() {
+    var key = reportKey(), type = REPORT_TYPES.some(function (x) { return x[0] === state.reportType; }) ? state.reportType : "calendar";
+    var prev = document.title;
+    document.title = reportFileName(type, key, employeeKey());
+    window.print();
+    setTimeout(function () { document.title = prev; }, 1000);
   }
   function downloadXls() {
-    var key = rosterKey(), type = state.reportType || "plan", t = reportTable(type, key), name = state.clinicName || "کلین‌بان";
+    var key = reportKey(), type = state.reportType || "plan", name = state.clinicName || "کلین‌بان", title = reportTitle(type);
     var cell = function (c, tag) { return "<" + tag + ">" + esc(c) + "</" + tag + ">"; };
-    var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"></head><body dir="rtl"><table>' +
-      "<tr>" + cell(name, "th") + "</tr><tr>" + cell(t.title + " · ماه " + faDigits(key.slice(0, 7)), "th") + "</tr><tr>" + t.head.map(function (x) { return cell(x, "th"); }).join("") + "</tr>" +
-      t.rows.map(function (r) { return "<tr>" + r.map(function (c) { return cell(c, "td"); }).join("") + "</tr>"; }).join("") + "</table></body></html>";
-    var blob = new Blob(["\ufeff" + html], { type: "application/vnd.ms-excel;charset=utf-8" });
+    var parts = ["<tr>" + cell(name, "th") + "</tr>", "<tr>" + cell(title + " · " + reportPeriod(type, key), "th") + "</tr>"];
+    reportSections(type, key).forEach(function (s) {
+      parts.push("<tr>" + cell(s.g.name, "th") + "</tr>", "<tr>" + s.t.head.map(function (x) { return cell(x, "th"); }).join("") + "</tr>",
+        s.t.rows.map(function (r) { return "<tr>" + r.map(function (c) { return cell(repText(c), "td"); }).join("") + "</tr>"; }).join(""), "<tr></tr>");
+    });
+    var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"></head><body dir="rtl"><table>' + parts.join("") + "</table></body></html>";
+    var blob = new Blob(["﻿" + html], { type: "application/vnd.ms-excel;charset=utf-8" });
     var a = document.createElement("a"), url = URL.createObjectURL(blob);
-    a.href = url; a.download = "clinic-" + type + "-" + key.slice(0, 7).replace("/", "-") + ".xls";
+    a.href = url; a.download = reportFileName(state.reportType || "plan", key, employeeKey()) + ".xls";
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   }
   function fairHTML() {
     var key = rosterKey(), st = fairStats(monthKeys(key)), sh = liveShifts();
-    var emps = liveEmployees().filter(function (e) { return e.active; }).sort(byName);
+    var allEmps = liveEmployees().filter(function (e) { return e.active; });
     var agg = {};
-    emps.forEach(function (e) { if (!shareOf(e)) return; var g = agg[e.groupId] || (agg[e.groupId] = { sum: 0, n: 0 }); g.sum += st[e.id].mins; g.n++; });
+    allEmps.forEach(function (e) { if (!shareOf(e)) return; var g = agg[e.groupId] || (agg[e.groupId] = { sum: 0, n: 0 }); g.sum += st[e.id].mins; g.n++; });
+    var sel = state.fairGroup || "all";
     var head = "<tr><th>کارمند</th>" + sh.map(function (s) { return "<th>" + esc(s.name) + "</th>"; }).join("") +
       "<th>ساعت</th><th>روز تعطیل</th><th>انحراف</th><th>وضعیت</th><th>محدوده ساعت</th></tr>";
-    var rows = emps.map(function (e) {
+    var rowOf = function (e) {
       var x = st[e.id], shares = shareOf(e), g = agg[e.groupId];
       var avg = g && g.n ? g.sum / g.n : 0, dev = avg && shares ? (x.mins - avg) / avg : 0;
       var badge = !shares ? '<span class="hint">معاف از تقسیم مساوی</span>'
@@ -1958,12 +2815,20 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
         sh.map(function (s) { return "<td>" + faDigits(x.shifts[s.id] || 0) + "</td>"; }).join("") +
         "<td>" + faDigits(Math.round(x.mins / 60)) + "</td><td>" + faDigits(x.off) + "</td><td>" +
         (shares && avg ? (dev >= 0 ? "+" : "-") + faDigits(Math.round(Math.abs(dev) * 100)) + "٪" : "—") + "</td><td>" + badge + "</td><td>" + hoursBadge(e, x.mins) + "</td></tr>";
+    };
+    var body = liveGroups().filter(function (g) { return sel === "all" || g.id === sel; }).map(function (g) {
+      var emps = allEmps.filter(function (e) { return e.groupId === g.id; }).sort(byName);
+      if (!emps.length) return "";
+      return '<div class="rs-group"><span class="gc" style="--gc:' + groupColor(g.id) + '"></span><b>' + esc(g.name) + "</b><small>" + faDigits(emps.length) + " نفر</small></div>" +
+        '<div class="fair-wrap"><table class="fair-table"><thead>' + head + "</thead><tbody>" + emps.map(rowOf).join("") + "</tbody></table></div>";
     }).join("");
+    var gopts = '<option value="all">همه گروه‌ها</option>' + liveGroups().map(function (g) { return '<option value="' + esc(g.id) + '"' + (sel === g.id ? " selected" : "") + ">" + esc(g.name) + "</option>"; }).join("");
     return '<section class="card"><div class="fair-actions"><h2 class="fair-title">عدالت در ماه ' + faDigits(key.slice(0, 7)) + '</h2>' +
+      '<label class="field" for="fair-group"><span>گروه</span><select class="control" id="fair-group" data-fair-group>' + gopts + "</select></label>" +
+      '<button type="button" class="btn" data-action="fair-print">گزارش چاپی عدالت</button>' +
       '<button type="button" class="btn ghost" data-action="staff-tab" data-value="roster">تغییر ماه از برنامه ماهانه</button></div>' +
       '<p class="hint">تعداد هر نوع شیفت، ساعت کل و روزهای تعطیل کاری هر نفر در این ماه. «انحراف» فاصله‌ی ساعت از میانگین گروه است؛ بیش از ±' + faDigits(Math.round(FAIR_TOL * 100)) + '٪ نامتعادل است.</p>' +
-      (emps.length && sh.length ? '<div class="fair-wrap"><table class="fair-table"><thead>' + head + "</thead><tbody>" + rows + "</tbody></table></div>" : '<p class="hint">کارمند فعال یا شیفت تعریف‌شده‌ای نیست.</p>') +
-      "</section>";
+      (body || '<p class="hint">کارمند فعال یا شیفت تعریف‌شده‌ای نیست.</p>') + "</section>";
   }
 
   // ---------- planning rules screen ----------
@@ -1975,7 +2840,9 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
       { id: "nights", type: "maxRun", kind: "night", label: "حداکثر شب متوالی", value: 3, mode: "hard", enabled: true },
       { id: "workrun", type: "maxRun", kind: "*", label: "حداکثر روز کاری متوالی", value: 6, mode: "soft", enabled: true },
       { id: "doc-night", type: "minInGroup", kind: "night", groupId: pz ? pz.id : "", label: "حداقل پزشک در شیفت شب", value: 1, mode: "hard", enabled: !!pz },
-      { id: "nurse-min", type: "minInGroup", kind: "*", groupId: pr ? pr.id : "", label: "حداقل پرستار در هر شیفت", value: 1, mode: "soft", enabled: !!pr }
+      { id: "nurse-min", type: "minInGroup", kind: "*", groupId: pr ? pr.id : "", label: "حداقل پرستار در هر شیفت", value: 1, mode: "soft", enabled: !!pr },
+      { id: "night-off", type: "nightOff", label: "یک روز کامل استراحت بعد از شب", value: 1, mode: "hard", enabled: true },
+      { id: "eve-morn", type: "eveMorn", label: "عصر و صبح روز بعد با هم مجاز نیست", value: 1, mode: "hard", enabled: true }
     ];
   }
   // Plain-language guide to how staff are scheduled. Static text, shown first on the rules screen.
@@ -2025,12 +2892,17 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
       '<li><b>حداکثر شب متوالی (سخت):</b> بیشتر از این تعداد شب پشت‌سرهم برای یک نفر ثبت نمی‌شود.</li>' +
       '<li><b>حداکثر روز کاری متوالی (نرم):</b> بیشتر از این تعداد روز کاری پشت‌سرهم هشدار می‌دهد.</li>' +
       '<li><b>حداقل پزشک در شیفت شب (سخت):</b> در هر شب باید حداقل این تعداد از گروه پزشکان باشند.</li>' +
-      '<li><b>حداقل پرستار در هر شیفت (نرم):</b> در هر شیفت باید حداقل این تعداد از گروه پرستاران باشند.</li></ul>' +
+      '<li><b>حداقل پرستار در هر شیفت (نرم):</b> در هر شیفت باید حداقل این تعداد از گروه پرستاران باشند.</li>' +
+      '<li><b>یک روز کامل استراحت بعد از شب (سخت):</b> بعد از هر شب، روز بعد برای همان نفر کار ثبت نمی‌شود. این قانون برای همه‌ی گروه‌ها یکسان است.</li>' +
+      '<li><b>عصر به صبح (سخت):</b> شیفت عصر و صبح روز بعد برای یک نفر پشت‌سرهم ثبت نمی‌شود.</li></ul>' +
 
       '<h3>۹. برنامه‌ماهانه و هشدارها</h3><ul>' +
       '<li>هر خانه را می‌توان دستی تغییر داد. خانه‌ی نارنجی یعنی هشدار قانون نرم، خانه‌ی قرمز یعنی نقض قانون سخت.</li>' +
       '<li>ردیف «کمبود نیرو» زیر جدول نشان می‌دهد کدام روز و کدام شیفت کم است.</li>' +
-      '<li>تغییر دستی بعدی روی پیشنهادهای قبلی اثر دارد؛ پیشنهاد عادلانه شیفت‌های موجود را پاک نمی‌کند.</li></ul>' +
+      '<li>تغییر دستی بعدی روی پیشنهادهای قبلی اثر دارد؛ پیشنهاد عادلانه شیفت‌های موجود را پاک نمی‌کند.</li>' +
+      '<li><b>تأیید نهایی ماه:</b> مدیر ماه را قفل می‌کند. ماه قفل‌شده با پیشنهاد، پاک‌سازی یا تغییر دستی عوض نمی‌شود، تا وقتی قفل برداشته شود.</li>' +
+      '<li><b>روزهای گذشته:</b> اگر برای فردی در روز گذشته سابقه‌ای ثبت شده باشد، آن سابقه تغییر نمی‌کند. روز گذشته‌ی خالی را می‌توان پر کرد، چون با سابقه‌ای تضاد ندارد.</li>' +
+      '<li><b>اعتبارسنجی:</b> دکمه‌ی «اعتبارسنجی برنامه» کل ماه را دوباره بررسی می‌کند: نقض قانون سخت، هشدار نرم، کمبود، و انحراف عدالت کلی و گروهی.</li></ul>' +
 
       '<h3>۱۰. گزارش عدالت</h3><ul>' +
       '<li>برای هر کارمند تعداد هر نوع شیفت، ساعت کل و روزهای تعطیل کاری ماه را نشان می‌دهد.</li>' +
@@ -2038,10 +2910,44 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
       '<li>«محدوده ساعت» نشان می‌دهد نفر بالای سقف، زیر حداقل یا در محدوده است.</li></ul>' +
 
       '<h3>۱۱. محدودیت‌های فعلی</h3><ul>' +
-      '<li>معافیت فردی (یک نفر خاص با دلیل و بازه‌ی زمانی) هنوز نیست؛ فعلاً معافیت فقط در سطح گروه است.</li>' +
+      '<li>معافیت فردی: در فرم هر کارمند، بازه‌ی تاریخی و نوع شیفت‌های معاف را ثبت کنید. در آن بازه این فرد برای آن شیفت‌ها برنامه‌ریزی نمی‌شود.</li>' +
       '<li>افزودن قانون جدید هنوز امکان‌پذیر نیست؛ فقط قوانین موجود قابل تنظیم‌اند.</li>' +
       '<li>صف چرخش دیده‌نشدنی است و فهرست نوبت بعدی نشان داده نمی‌شود.</li></ul>' +
       '</section>';
+  }
+  // Rule types the engine understands. Numeric types have a limit (RULE_MAX); the others are yes/no.
+  var RULE_TYPE_INFO = {
+    restGap: ["استراحت بین دو شیفت (ساعت)", "ساعت"],
+    maxRun: ["حداکثر روز متوالی", "روز"],
+    minInGroup: ["حداقل نیرو در گروه", "نفر"],
+    nightOff: ["یک روز کامل استراحت بعد از شب", ""],
+    eveMorn: ["عصر و صبح روز بعد با هم مجاز نیست", ""]
+  };
+  function ruleKindOptions(sel) {
+    return '<option value="*"' + (sel === "*" ? " selected" : "") + ">همه‌ی شیفت‌ها</option>" + SHIFT_KINDS.map(function (k) {
+      return '<option value="' + k[0] + '"' + (sel === k[0] ? " selected" : "") + ">" + k[1] + "</option>";
+    }).join("");
+  }
+  function ruleGroupOptions(sel) {
+    return '<option value="">—</option>' + liveGroups().map(function (g) {
+      return '<option value="' + esc(g.id) + '"' + (sel === g.id ? " selected" : "") + ">" + esc(g.name) + "</option>";
+    }).join("");
+  }
+  // r = the rule being edited, or null for a new rule. The type of an existing rule cannot change.
+  function ruleFormHTML(r) {
+    var type = r ? r.type : "restGap";
+    var typeOpts = Object.keys(RULE_TYPE_INFO).map(function (t) {
+      return '<option value="' + t + '"' + (type === t ? " selected" : "") + ">" + RULE_TYPE_INFO[t][0] + "</option>";
+    }).join("");
+    return '<form data-form="rule" class="group-form rule-form" novalidate><input type="hidden" name="rl-id" value="' + esc(r ? r.id : "") + '">' +
+      '<div class="form-grid"><label class="field"><span>نوع قانون</span><select class="control" name="rl-type"' + (r ? " disabled" : "") + ">" + typeOpts + "</select></label>" +
+      '<label class="field"><span>عنوان قانون</span><input class="control" name="rl-label" value="' + esc(r ? r.label : "") + '" autocomplete="off" required></label>' +
+      '<label class="field"><span>عدد</span><input class="control" name="rl-value" type="number" min="0" dir="ltr" inputmode="numeric" value="' + esc(r ? r.value : 1) + '"></label>' +
+      '<label class="field"><span>نوع</span><select class="control" name="rl-mode"><option value="hard"' + (!r || r.mode !== "soft" ? " selected" : "") + ">سخت</option><option value=\"soft\"" + (r && r.mode === "soft" ? " selected" : "") + ">نرم</option></select></label>" +
+      '<label class="field"><span>شیفت (برای حداکثر متوالی و حداقل گروهی)</span><select class="control" name="rl-kind">' + ruleKindOptions(r && r.kind ? r.kind : "*") + "</select></label>" +
+      '<label class="field"><span>گروه (برای حداقل گروهی)</span><select class="control" name="rl-group">' + ruleGroupOptions(r ? r.groupId : "") + "</select></label></div>" +
+      '<p class="hint">عدد و شیفت فقط برای نوع‌هایی که به آن نیاز دارند استفاده می‌شوند؛ بقیه نادیده گرفته می‌شوند.</p>' +
+      '<div class="row"><button class="btn" type="submit">ذخیره قانون</button><button type="button" class="btn ghost" data-action="rule-cancel">انصراف</button></div></form>';
   }
   function rulesHTML() {
     var hol = (data.holidays || []).slice().sort();
@@ -2049,19 +2955,64 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
       return '<span class="chip">' + esc(friendlyJ(k)) + ' <button type="button" class="chip-x" data-action="hol-del" data-value="' + esc(k) + '" aria-label="حذف ' + esc(friendlyJ(k)) + '">×</button></span>';
     }).join("") : '<p class="hint">روز تعطیل رسمی ثبت نشده است.</p>';
     var rows = (data.rules || []).map(function (r) {
+      if (state.ruleEdit === r.id) return ruleFormHTML(r);
       var sub = r.type === "minInGroup" ? '<small class="hint">' + esc(groupName(r.groupId)) + " · " + esc(r.kind === "*" ? "همه‌ی شیفت‌ها" : kindLabel(r.kind)) + "</small>" : "";
-      var unit = r.type === "restGap" ? "ساعت" : r.type === "maxRun" ? "روز" : "نفر";
+      var unit = RULE_TYPE_INFO[r.type] ? RULE_TYPE_INFO[r.type][1] : "";
+      var isBool = BOOL_RULE_TYPES.indexOf(r.type) >= 0;
+      var actions = state.ruleDelete === r.id
+        ? '<div class="confirm"><p>قانون «' + esc(r.label) + '» حذف شود؟</p><div class="row"><button type="button" class="btn danger" data-action="rule-del-yes" data-value="' + esc(r.id) + '">بله، حذف شود</button><button type="button" class="btn ghost" data-action="rule-del-no">انصراف</button></div></div>'
+        : '<div class="group-actions"><button type="button" class="icon-btn" data-action="rule-edit" data-value="' + esc(r.id) + '" aria-label="ویرایش قانون ' + esc(r.label) + '">' + IC.edit + "</button>" +
+          (r.custom ? '<button type="button" class="icon-btn" data-action="rule-del" data-value="' + esc(r.id) + '" aria-label="حذف قانون ' + esc(r.label) + '">' + IC.trash + "</button>" : "") + "</div>";
       return '<div class="rule-row"><div class="rule-main"><b>' + esc(r.label) + "</b>" + sub + "</div>" +
-        '<div class="rule-ctl"><label class="field rule-val"><span>' + unit + '</span><input class="control" type="number" min="0" max="' + RULE_MAX[r.type] + '" value="' + r.value + '" data-rule="' + esc(r.id) + '" data-field="value" dir="ltr" inputmode="numeric"></label>' +
+        '<div class="rule-ctl">' + (isBool ? "" : '<label class="field rule-val"><span>' + unit + '</span><input class="control" type="number" min="0" max="' + RULE_MAX[r.type] + '" value="' + r.value + '" data-rule="' + esc(r.id) + '" data-field="value" dir="ltr" inputmode="numeric"></label>') +
         '<label class="field"><span>نوع</span><select class="control" data-rule="' + esc(r.id) + '" data-field="mode"><option value="hard"' + (r.mode === "hard" ? " selected" : "") + ">سخت</option><option value=\"soft\"" + (r.mode === "soft" ? " selected" : "") + ">نرم</option></select></label>" +
-        '<label class="check"><input type="checkbox" data-rule="' + esc(r.id) + '" data-field="enabled"' + (r.enabled ? " checked" : "") + "><span>فعال</span></label></div></div>";
+        '<label class="check"><input type="checkbox" data-rule="' + esc(r.id) + '" data-field="enabled"' + (r.enabled ? " checked" : "") + "><span>فعال</span></label>" + actions + "</div></div>";
     }).join("");
+    var addBlock = state.ruleEdit === "new" ? ruleFormHTML(null) : '<div class="row"><button type="button" class="btn" data-action="rule-new">' + IC.plus + "افزودن قانون</button></div>";
     return '<div id="rules-area">' + guideHTML() +
       (state.rulesMsg ? '<p class="msg error" role="alert">' + esc(state.rulesMsg) + "</p>" : "") +
       '<section class="card"><h2 class="fair-title">روزهای تعطیل رسمی</h2><p class="hint">جمعه‌ها همیشه روز تعطیل کاری‌اند. روزهای زیر هم مثل جمعه بین همه‌ی نفرات تقسیم می‌شوند.</p>' +
       '<div class="fair-actions"><div class="roster-date">' + dateFieldHTML("hol-date", "افزودن روز تعطیل", "", { clearable: true }) + '</div><button type="button" class="btn" data-action="hol-add">افزودن</button></div>' +
       '<div class="chips">' + holList + "</div></section>" +
-      '<section class="card"><h2 class="fair-title">قوانین برنامه‌ریزی</h2><p class="hint">عدد، نوع و وضعیت هر قانون قابل تغییر است. «سخت» یعنی انتخاب ممنوع؛ «نرم» یعنی هشدار.</p>' + rows + "</section></div>";
+      '<section class="card"><h2 class="fair-title">قوانین برنامه‌ریزی</h2><p class="hint">عدد، نوع و وضعیت هر قانون قابل تغییر است. «سخت» یعنی انتخاب ممنوع؛ «نرم» یعنی هشدار. قانون‌های اصلی حذف نمی‌شوند ولی می‌توان آن‌ها را غیرفعال کرد. قانون تازه با دکمه‌ی زیر اضافه می‌شود.</p>' +
+      rows + addBlock + "</section></div>";
+  }
+  async function onRule(form) {
+    var id = form.elements["rl-id"].value, isNew = !id;
+    var old = isNew ? null : (data.rules || []).filter(function (x) { return x.id === id; })[0];
+    if (!isNew && !old) { state.rulesMsg = "این قانون پیدا نشد."; state.ruleEdit = null; return refreshRules(); }
+    var type = isNew ? form.elements["rl-type"].value : old.type;
+    var label = form.elements["rl-label"].value.trim();
+    var mode = form.elements["rl-mode"].value === "soft" ? "soft" : "hard";
+    var kind = form.elements["rl-kind"].value || "*", gid = form.elements["rl-group"].value;
+    var value = 1;
+    if (!label) { state.rulesMsg = "عنوان قانون را وارد کنید."; return refreshRules(); }
+    if (RULE_MAX[type] !== undefined) {
+      value = parseInt(normDigits(form.elements["rl-value"].value), 10);
+      if (isNaN(value) || value < 0 || value > RULE_MAX[type]) { state.rulesMsg = "عدد باید بین ۰ و " + faDigits(RULE_MAX[type]) + " باشد."; return refreshRules(); }
+    }
+    if (type === "minInGroup" && !gid) { state.rulesMsg = "برای حداقل نیرو در گروه، گروه را انتخاب کنید."; return refreshRules(); }
+    var rule = { id: isNew ? "r-" + uid() : old.id, type: type, label: label, value: value, mode: mode, enabled: isNew ? true : old.enabled, custom: isNew ? true : !!old.custom };
+    if (type === "maxRun" || type === "minInGroup") rule.kind = kind;
+    if (type === "minInGroup") rule.groupId = gid;
+    var prev = data.rules.slice();
+    if (isNew) data.rules.push(rule); else data.rules[data.rules.indexOf(old)] = rule;
+    try {
+      await kvSet(K_RULES, data.rules);
+      await logAudit(isNew ? "افزودن قانون" : "ویرایش قانون", "برنامه‌ریزی", label);
+      state.ruleEdit = null; state.rulesMsg = "";
+    } catch (err) { data.rules = prev; state.rulesMsg = "ذخیره‌سازی ناموفق بود."; }
+    refreshRules();
+  }
+  async function ruleRemove(id) {
+    var r = (data.rules || []).filter(function (x) { return x.id === id; })[0];
+    state.ruleDelete = null;
+    if (!r || !r.custom) { state.rulesMsg = "قانون‌های اصلی حذف نمی‌شوند؛ می‌توانید آن را غیرفعال کنید."; return refreshRules(); }
+    var prev = data.rules.slice();
+    data.rules = data.rules.filter(function (x) { return x.id !== id; });
+    try { await kvSet(K_RULES, data.rules); await logAudit("حذف قانون", "برنامه‌ریزی", r.label); state.rulesMsg = ""; }
+    catch (err) { data.rules = prev; state.rulesMsg = "ذخیره‌سازی ناموفق بود."; }
+    refreshRules();
   }
   function refreshRules(focusId) {
     var el = document.getElementById("rules-area");
@@ -2101,6 +3052,35 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     refreshRules();
   }
 
+  // ---------- clinic logo ----------
+  function resizeLogo(file) {
+    return new Promise(function (resolve, reject) {
+      var img = new Image(), url = URL.createObjectURL(file);
+      img.onload = function () {
+        var max = 256, scale = Math.min(1, max / Math.max(img.width, img.height)), c = document.createElement("canvas");
+        c.width = Math.max(1, Math.round(img.width * scale)); c.height = Math.max(1, Math.round(img.height * scale));
+        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url);
+        resolve(c.toDataURL("image/png"));
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error("تصویر خوانده نشد.")); };
+      img.src = url;
+    });
+  }
+  function logoCardHTML() {
+    var has = !!state.clinicLogo;
+    return '<section class="card"><h2>لوگوی کلینیک</h2><div class="logo-row"><span class="logo-preview">' + (has ? '<img src="' + state.clinicLogo + '" alt="لوگوی کلینیک">' : LOGO) + '</span><div class="photo-actions"><label class="btn ghost" for="clinic-logo-file">بارگزاری لوگو</label><input class="sr" id="clinic-logo-file" type="file" accept="image/*" data-clinic-logo="1">' + (has ? '<button type="button" class="btn ghost" data-action="clinic-logo-clear">حذف لوگو</button>' : "") + '</div></div>' +
+      '<p class="msg" id="cl-msg" role="status" hidden></p><p class="hint">لوگو در داشبورد نمایش داده می‌شود. تصویر مربع یا شفاف بهتر است؛ حداکثر ۲۵۶ پیکسل ذخیره می‌شود.</p></section>';
+  }
+  async function saveClinicLogo(url) {
+    await kvSet("clinic.logo", url);
+    state.clinicLogo = url; render(); setMsg("cl-msg", "لوگو ذخیره شد.", "ok");
+  }
+  async function clearClinicLogo() {
+    try { await kvSet("clinic.logo", ""); state.clinicLogo = ""; render(); }
+    catch (e) { setMsg("cl-msg", "حذف لوگو ناموفق بود.", "error"); }
+  }
+
   // ---------- staff actions ----------
   function resizePhoto(file) {
     return new Promise(function (resolve, reject) {
@@ -2138,6 +3118,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     if (editing) rec = data.employees.find(function (x) { return x.id === editing; });
     if (!rec) { rec = { id: uid(), clinicId: CLINIC, createdAt: now, deletedAt: null }; data.employees.push(rec); editing = null; }
     rec.firstName = first; rec.lastName = last; rec.code = code; rec.groupId = el["e-group"].value;
+    rec.latinName = el["e-latin"].value.replace(/[^A-Za-z .\-]/g, "").replace(/\s+/g, " ").trim();
     rec.specialty = el["e-specialty"].value.trim(); rec.position = el["e-position"].value.trim(); rec.phone = phone;
     rec.equalShare = el["e-share"].value; rec.startDate = startN || ""; rec.restrictions = el["e-restrictions"].value.trim(); rec.active = el["e-active"].checked;
     rec.photo = state.formPhoto || null; rec.updatedAt = now;
@@ -2167,6 +3148,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
   function staffAction(a, el) {
     var id = el.getAttribute("data-id");
     if (a === "staff-tab") { resetStaff(); state.view = "staff"; state.staffTab = el.getAttribute("data-value"); render(); }
+    if (a === "fair-print") { state.reportType = "fair"; state.reportGroup = state.fairGroup || "all"; state.reportDate = rosterKey(); state.view = "staff"; state.staffTab = "reports"; render(); }
     else if (a === "emp-new") { resetStaff(); state.view = "staff"; state.staffMode = "form"; state.formPhoto = null; render(); window.scrollTo(0, 0); }
     else if (a === "emp-edit") {
       var e = data.employees.find(function (x) { return x.id === id; }); if (!e) return true;
@@ -2185,6 +3167,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
       }
     }
     else if (a === "photo-clear") { state.formPhoto = null; refreshAvatar(); }
+    else if (a === "clinic-logo-clear") { clearClinicLogo(); }
     else if (a === "group-new") { state.groupEdit = "new"; state.groupDelete = null; state.groupMsg = ""; render(); }
     else if (a === "group-edit") { state.groupEdit = id; state.groupDelete = null; state.groupMsg = ""; render(); }
     else if (a === "group-cancel") { state.groupEdit = null; render(); }
@@ -2203,16 +3186,29 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
       }
     }
     else if (a === "fair-month") { fairMonth(); }
-    else if (a === "report-print") { window.print(); }
+    else if (a === "report-print") { printReport(); }
     else if (a === "report-xls") { downloadXls(); }
     else if (a === "roster-clear") { state.rosterConfirm = true; refreshRoster(); }
-    else if (a === "roster-clear-no") { state.rosterConfirm = false; refreshRoster(); }
-    else if (a === "roster-clear-yes") { clearRoster(); }
+    else if (a === "roster-clear-no") { state.rosterConfirm = false; state.rosterConfirmAll = false; refreshRoster(); }
+    else if (a === "roster-clear-yes") { clearRoster(true); }
+    else if (a === "roster-clear-past") { state.rosterConfirmAll = true; refreshRoster(); }
+    else if (a === "roster-clear-all-yes") { clearRoster(true); }
+    else if (a === "roster-lock") { lockMonth(true); }
+    else if (a === "roster-unlock") { lockMonth(false); }
+    else if (a === "roster-validate") { validateRoster(); }
     else if (a === "roster-view") { state.rosterView = el.getAttribute("data-value"); refreshRoster(); }
     else if (a === "rday-prev") { state.rosterDay = keyDelta(state.rosterDay || jKeyOf(new Date()), -1); refreshRoster(); }
     else if (a === "rday-next") { state.rosterDay = keyDelta(state.rosterDay || jKeyOf(new Date()), 1); refreshRoster(); }
     else if (a === "rday-today") { state.rosterDay = null; refreshRoster(); }
     else if (a === "hol-add") { holidayAdd(); }
+    else if (a === "exempt-add") { exemptAdd(el.getAttribute("data-value")); }
+    else if (a === "exempt-del") { exemptRemove(el.getAttribute("data-value"), el.getAttribute("data-id")); }
+    else if (a === "rule-new") { state.ruleEdit = "new"; state.rulesMsg = ""; refreshRules(); }
+    else if (a === "rule-edit") { state.ruleEdit = el.getAttribute("data-value"); state.rulesMsg = ""; refreshRules(); }
+    else if (a === "rule-cancel") { state.ruleEdit = null; state.rulesMsg = ""; refreshRules(); }
+    else if (a === "rule-del") { state.ruleDelete = el.getAttribute("data-value"); refreshRules(); }
+    else if (a === "rule-del-no") { state.ruleDelete = null; refreshRules(); }
+    else if (a === "rule-del-yes") { ruleRemove(el.getAttribute("data-value")); }
     else if (a === "hol-del") { holidayDel(el.getAttribute("data-value")); }
     else return false;
     return true;
@@ -2244,7 +3240,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     var f = ev.target.closest("[data-form]"); if (!f) return;
     ev.preventDefault();
     var k = f.getAttribute("data-form");
-    if (k === "setup") onSetup(f); else if (k === "login") onLogin(f); else if (k === "change-pw") onChangePw(f); else if (k === "clinic-name") onClinicName(f); else if (k === "employee") onEmployee(f); else if (k === "group") onGroup(f); else if (k === "shift") onShift(f);
+    if (k === "setup") onSetup(f); else if (k === "login") onLogin(f); else if (k === "change-pw") onChangePw(f); else if (k === "clinic-name") onClinicName(f); else if (k === "employee") onEmployee(f); else if (k === "group") onGroup(f); else if (k === "shift") onShift(f); else if (k === "rule") onRule(f);
   });
   app.addEventListener("input", function (ev) {
     var tg = ev.target, m = tg.getAttribute && tg.getAttribute("data-meter");
@@ -2257,9 +3253,18 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     if (ev.target.getAttribute && ev.target.getAttribute("data-rule")) ruleChange(ev.target.getAttribute("data-rule"), ev.target.getAttribute("data-field"), ev.target);
     if (ev.target.hasAttribute && ev.target.hasAttribute("data-roster-group")) { state.rosterGroup = ev.target.value; refreshRoster(); }
     else if (ev.target.hasAttribute && ev.target.hasAttribute("data-report-type")) { state.reportType = ev.target.value; render(); }
+    else if (ev.target.hasAttribute && ev.target.hasAttribute("data-report-group")) { state.reportGroup = ev.target.value; render(); }
+    else if (ev.target.hasAttribute && ev.target.hasAttribute("data-fair-group")) { state.fairGroup = ev.target.value; render(); }
+    else if (ev.target.hasAttribute && ev.target.hasAttribute("data-report-emp")) { state.reportEmp = ev.target.value; render(); }
+    else if (ev.target.hasAttribute && ev.target.hasAttribute("data-cal-view")) { state.calView = ev.target.value; render(); }
     else if (ev.target.getAttribute && ev.target.getAttribute("data-roster-emp")) rosterSet(ev.target.getAttribute("data-roster-emp"), ev.target.getAttribute("data-roster-date"), ev.target.value);
     if (ev.target.getAttribute && ev.target.getAttribute("data-pattern-group")) togglePattern(ev.target.getAttribute("data-pattern-group"), ev.target.getAttribute("data-pattern-shift"), ev.target.checked, ev.target.id);
     if (ev.target.id === "e-group") { var dl = $("#e-titles"); if (dl) dl.innerHTML = titlesOptions(ev.target.value); }
+    if (ev.target.getAttribute && ev.target.getAttribute("data-clinic-logo") && ev.target.files && ev.target.files[0]) {
+      var logoFile = ev.target.files[0];
+      ev.target.value = "";
+      resizeLogo(logoFile).then(saveClinicLogo).catch(function (e) { setMsg("cl-msg", e.message || "لوگو ذخیره نشد.", "error"); });
+    }
     if (ev.target.getAttribute && ev.target.getAttribute("data-photo") && ev.target.files && ev.target.files[0]) {
       resizePhoto(ev.target.files[0]).then(function (url) { state.formPhoto = url; refreshAvatar(); })
         .catch(function (e) { setMsg("emp-msg", e.message || "تصویر خوانده نشد.", "error"); });
@@ -2346,7 +3351,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
 
   // ================= boot =================
   try { if (!inViewer) applyTheme(localStorage.getItem("cs-theme") || "system"); } catch (e) {}
-  Promise.all([kvGet("auth.manager"), kvGet("clinic.name")]).then(function (v) { state.clinicName = typeof v[1] === "string" ? v[1] : ""; state.screen = v[0] ? "login" : "setup"; render(); })
+  Promise.all([kvGet("auth.manager"), kvGet("clinic.name"), kvGet("clinic.logo")]).then(function (v) { state.clinicName = typeof v[1] === "string" ? v[1] : ""; state.clinicLogo = typeof v[2] === "string" ? v[2] : ""; state.screen = v[0] ? "login" : "setup"; render(); })
     .catch(function () { app.innerHTML = '<div class="splash"><p class="msg error">مرورگر اجازه ذخیره‌سازی نمی‌دهد. حالت خصوصی را خاموش کنید یا تنظیمات سایت را بررسی کنید.</p></div>'; });
 })();
 </script>
