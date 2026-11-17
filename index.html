@@ -3,9 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#14213d">
+<meta name="theme-color" content="#0e1a33">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="کلین‌بان">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="claude:viewport-fit-sides" content="cover">
 <title>کلین‌بان</title>
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 56'%3E%3Cpath d='M24 2 44 9v18c0 13-8.5 22-20 27C12.5 49 4 40 4 27V9z' fill='%23c8962e'/%3E%3Crect x='20' y='16' width='8' height='25' rx='2.6' fill='%2314213d'/%3E%3Crect x='11.5' y='24.5' width='25' height='8' rx='2.6' fill='%2314213d'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap">
 <style>
@@ -697,10 +703,51 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
 .busy-rule.is-bad small { color: var(--danger); opacity: 1; }
 .busy-rule.is-ok small { opacity: 0.9; }
 @keyframes busy-pulse { 50% { opacity: 0.3; } }
+/* ---------- opening animation: logo pieces assemble ---------- */
+.intro { position: fixed; inset: 0; z-index: 200; display: grid; place-content: center; justify-items: center; gap: 18px; background: radial-gradient(ellipse at 50% 40%, #1d3360 0%, #0e1a33 70%); transition: opacity .6s ease, visibility .6s; cursor: pointer; direction: rtl; }
+.intro.out { opacity: 0; visibility: hidden; }
+.intro-logo { width: 150px; height: 175px; overflow: visible; filter: drop-shadow(0 10px 24px rgba(0,0,0,.35)); }
+.intro-logo .ip { transform-box: fill-box; transform-origin: center; opacity: 0; animation: intro-assemble 1s cubic-bezier(.2,.8,.2,1) var(--d, 0s) forwards; }
+@keyframes intro-assemble {
+  0% { opacity: 0; transform: translate(var(--dx, 0px), var(--dy, 0px)) rotate(var(--r, 0deg)) scale(.4); }
+  60% { opacity: 1; }
+  100% { opacity: 1; transform: none; }
+}
+.intro-logo .glint { opacity: 0; animation: intro-glint 1s ease-in-out 1.7s forwards; }
+@keyframes intro-glint {
+  0% { opacity: 0; transform: translateX(-60px) rotate(20deg); }
+  30% { opacity: .55; }
+  100% { opacity: 0; transform: translateX(120px) rotate(20deg); }
+}
+.intro-name { font-size: 30px; font-weight: 800; color: #ecd07a; letter-spacing: .5px; opacity: 0; animation: intro-up .8s ease 1.3s forwards; }
+.intro-sub { font-size: 14px; color: #b9c6e0; opacity: 0; animation: intro-up .8s ease 1.6s forwards; }
+@keyframes intro-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .intro *, .intro { animation-duration: .01s !important; animation-delay: 0s !important; transition-duration: .01s !important; }
+}
 </style>
 
 </head>
 <body>
+<div id="intro" class="intro" aria-hidden="true">
+  <svg class="intro-logo" viewBox="0 0 48 56">
+    <defs>
+      <linearGradient id="inG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ecd07a"/><stop offset="1" stop-color="#a9741a"/></linearGradient>
+      <linearGradient id="inN" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22386a"/><stop offset="1" stop-color="#0d182f"/></linearGradient>
+      <clipPath id="inClip"><path d="M24 1.5 45 8.5v19c0 13.5-9 23.2-21 27-12-3.8-21-13.5-21-27v-19z"/></clipPath>
+    </defs>
+    <path class="ip" style="--dx:-34px;--dy:-44px;--r:-25deg;--d:0s" d="M24 1.5 45 8.5v19c0 13.5-9 23.2-21 27-12-3.8-21-13.5-21-27v-19z" fill="url(#inG)"/>
+    <path class="ip" style="--dx:34px;--dy:-44px;--r:20deg;--d:.12s" d="M24 5.2 41.2 11v16.5c0 11.6-7.4 19.6-17.2 23.6-9.8-4-17.2-12-17.2-23.6V11z" fill="url(#inN)"/>
+    <path class="ip" style="--dx:50px;--dy:10px;--d:.28s" d="M25.74 14.62A12.5 12.5 0 0 1 35.59 31.68" fill="none" stroke="#ecd07a" stroke-width="2.6" stroke-linecap="round"/>
+    <path class="ip" style="--dx:0px;--dy:52px;--d:.34s" d="M33.85 34.7A12.5 12.5 0 0 1 14.15 34.7" fill="none" stroke="#8fb8ff" stroke-width="2.6" stroke-linecap="round"/>
+    <path class="ip" style="--dx:-50px;--dy:4px;--d:.4s" d="M12.41 31.68A12.5 12.5 0 0 1 22.26 14.62" fill="none" stroke="#6f86b5" stroke-width="2.6" stroke-linecap="round"/>
+    <rect class="ip" style="--dx:0px;--dy:-40px;--r:90deg;--d:.6s" x="21.2" y="21" width="5.6" height="12" rx="1.8" fill="#ffffff"/>
+    <rect class="ip" style="--dx:0px;--dy:40px;--r:-90deg;--d:.7s" x="18.2" y="24.2" width="11.6" height="5.6" rx="1.8" fill="#ffffff"/>
+    <g clip-path="url(#inClip)"><rect class="glint" x="8" y="-10" width="9" height="80" fill="#ffffff"/></g>
+  </svg>
+  <div class="intro-name">کلین‌بان</div>
+  <div class="intro-sub">مدیریت شیفت کلینیک</div>
+</div>
 <div id="app" dir="rtl"><div class="splash">در حال بارگذاری…</div></div>
 <div id="picker-root" dir="rtl"></div>
 
@@ -3353,6 +3400,17 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
   try { if (!inViewer) applyTheme(localStorage.getItem("cs-theme") || "system"); } catch (e) {}
   Promise.all([kvGet("auth.manager"), kvGet("clinic.name"), kvGet("clinic.logo")]).then(function (v) { state.clinicName = typeof v[1] === "string" ? v[1] : ""; state.clinicLogo = typeof v[2] === "string" ? v[2] : ""; state.screen = v[0] ? "login" : "setup"; render(); })
     .catch(function () { app.innerHTML = '<div class="splash"><p class="msg error">مرورگر اجازه ذخیره‌سازی نمی‌دهد. حالت خصوصی را خاموش کنید یا تنظیمات سایت را بررسی کنید.</p></div>'; });
+  // Service worker: makes the app installable and usable offline (only on http/https, not file://).
+  if ("serviceWorker" in navigator && /^https?:/.test(location.protocol)) { navigator.serviceWorker.register("sw.js").catch(function () {}); }
+  // Opening animation: hide after it finishes (or on tap), then remove it from the page.
+  (function () {
+    var intro = document.getElementById("intro");
+    if (!intro) return;
+    var reduce = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    var gone = function () { intro.classList.add("out"); setTimeout(function () { if (intro.parentNode) intro.parentNode.removeChild(intro); }, 700); };
+    intro.addEventListener("click", gone);
+    setTimeout(gone, reduce ? 300 : 3100);
+  })();
 })();
 </script>
 
