@@ -4,7 +4,7 @@
 
 ## فایل‌های این بسته
 - `index.html` — خود برنامه.
-- `manifest.webmanifest` — مشخصات نصب (نام، آیکن‌ها، رنگ، حالت تمام‌صفحه).
+- `manifest.json` — مشخصات نصب (نام، آیکن‌ها، رنگ، حالت تمام‌صفحه).
 - `sw.js` — service worker برای نصب‌پذیری و کار بدون اینترنت.
 - `icons/` — آیکن‌ها: `icon-192.png`، `icon-512.png`، `icon-maskable-512.png` و `apple-touch-icon.png`.
 - `.nojekyll` — باعث می‌شود GitHub Pages فایل‌ها را بدون پردازش Jekyll منتشر کند.
