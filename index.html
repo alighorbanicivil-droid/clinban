@@ -755,6 +755,21 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
 @media (prefers-reduced-motion: reduce) {
   .intro *, .intro { animation-duration: .01s !important; animation-delay: 0s !important; transition-duration: .01s !important; }
 }
+@media print {
+  /* Larger print sizes for list reports. Calendar reports (برنامه تقویمی and each employee's calendar) keep their own layout. */
+  .report-sheet .rs-name { font-size: 18px; }
+  .report-sheet .rs-head small { font-size: 12px; }
+  .report-sheet .rs-tile b { font-size: 14px; }
+  .report-sheet .rs-tile small { font-size: 11px; }
+  .report-sheet .rs-group { font-size: 15px; margin: 8px 0 4px; }
+  .report-sheet .rs-group small { font-size: 11px; }
+  .report-sheet .rs-table th, .report-sheet .rs-table td { font-size: 12px; padding: 6px 7px; line-height: 1.5; }
+  .report-sheet .rs-table thead th { font-size: 12px; }
+  .report-sheet .rs-table tbody th { font-size: 13px; min-width: 0; }
+  .report-sheet .rs-chip { font-size: 11px; padding: 2px 6px; border-radius: 5px; }
+  .report-sheet .rs-note, .report-sheet .rs-foot { font-size: 11px; }
+  .report-sheet .rs-grid td, .report-sheet .rs-grid th { font-size: 13px; }
+}
 </style>
 
 </head>
@@ -1777,7 +1792,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
   }
   function staffSeg(v, t) { return '<button type="button" data-action="staff-tab" data-value="' + v + '" aria-pressed="' + (state.staffTab === v) + '">' + t + "</button>"; }
   function staffPage() {
-    return '<div class="page-head"><div><h1 class="page-title">کارکنان</h1><p class="hint">گروه‌های شغلی و مشخصات کارکنان کلینیک</p></div><div class="seg tab-grid">' + staffSeg("list", "کارکنان") + staffSeg("roster", "برنامه ماهانه") + staffSeg("fair", "عدالت") + staffSeg("reports", "گزارش‌ها") + staffSeg("rules", "قوانین") + staffSeg("shifts", "انواع شیفت") + staffSeg("groups", "گروه‌های شغلی") + "</div></div>" +
+    return '<div class="page-head"><div><h1 class="page-title">کارکنان</h1><p class="hint">گروه‌های شغلی و مشخصات کارکنان کلینیک</p></div><div class="seg tab-grid">' + staffSeg("list", "کارکنان") + staffSeg("roster", "برنامه ماهانه")  + staffSeg("reports", "گزارش‌ها") + staffSeg("rules", "قوانین") + staffSeg("shifts", "انواع شیفت") + staffSeg("groups", "گروه‌های شغلی") + "</div></div>" +
       (state.staffTab === "roster" ? '<div id="roster-area">' + rosterArea() + "</div>" : state.staffTab === "rules" ? rulesHTML() : state.staffTab === "reports" ? reportsHTML() : state.staffTab === "fair" ? fairHTML() : state.staffTab === "shifts" ? shiftsHTML() : state.staffTab === "groups" ? groupsHTML() : state.staffMode === "form" ? empFormHTML() : empListHTML());
   }
   function empListHTML() {
@@ -2715,7 +2730,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
   function reportTable(type, key, gid) {
     var keys = reportKeysFor(type, key), st = fairStats(keys);
     var hol = data.holidays || [];
-    var emps = liveEmployees().filter(function (e) { return e.active && (!gid || e.groupId === gid); }).sort(byName);
+    var emps = liveEmployees().filter(function (e) { return e.active && (!gid || e.groupId === gid) && (type !== "work" || !state.workEmp || e.id === state.workEmp); }).sort(byName);
     var groups = gid ? liveGroups().filter(function (g) { return g.id === gid; }) : liveGroups();
     var out = { title: reportTitle(type), note: "", head: [], rows: [] };
     var nm = function (e) { return e.firstName + " " + e.lastName; };
@@ -2907,10 +2922,17 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
       })
     };
   }
-  function empFieldHTML() {
-    var list = liveEmployees().filter(function (e) { return e.active; }).sort(byName), cur = employeeKey();
-    return '<label class="field" for="rep-emp"><span>کارمند</span><select class="control" id="rep-emp" data-report-emp>' +
-      list.map(function (e) { return '<option value="' + esc(e.id) + '"' + (cur && cur.id === e.id ? " selected" : "") + ">" + esc(e.firstName + " " + e.lastName) + "</option>"; }).join("") + "</select></label>";
+  // Searchable employee picker for reports. key = the state field it sets; allAll = also offer "all employees".
+  function empFieldHTML(key, allAll) {
+    var list = liveEmployees().filter(function (e) { return e.active; }).sort(byName);
+    var cur = key === "workEmp" ? (list.filter(function (e) { return e.id === state.workEmp; })[0] || null) : employeeKey();
+    var all = allAll ? '<button type="button" class="swap-opt' + (!cur ? " is-on" : "") + '" data-action="report-emp-pick" data-key="' + key + '" data-id="" data-search="همه کارمندان همه"><span>همه‌ی کارمندان</span></button>' : "";
+    var opts = all + list.map(function (e) {
+      return '<button type="button" class="swap-opt' + (cur && cur.id === e.id ? " is-on" : "") + '" data-action="report-emp-pick" data-key="' + key + '" data-id="' + esc(e.id) + '" data-search="' + esc(swapNorm(e.firstName + " " + e.lastName + " " + groupName(e.groupId))) + '"><span>' + esc(e.firstName + " " + e.lastName) + "</span><small>" + esc(groupName(e.groupId)) + "</small></button>";
+    }).join("");
+    return '<div class="swap-side rep-emp"><label class="field" for="emp-q-' + key + '"><span>کارمند</span>' +
+      '<input class="control" id="emp-q-' + key + '" data-emp-search="' + key + '" type="search" autocomplete="off" placeholder="جستجوی نام کارمند" value="' + esc(cur ? cur.firstName + " " + cur.lastName : "") + '"></label>' +
+      '<div class="swap-list" id="emp-list-' + key + '" hidden>' + opts + "</div></div>";
   }
   // Same calendar grid as the group calendar, showing only this person's shift and leave on each day.
   function employeeGridHTML(e, keys) {
@@ -2956,7 +2978,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     return reportSheetTableHTML(type, key);
   }
   function reportSheetTableHTML(type, key) {
-    var secs = reportSections(type, key), period = reportPeriod(type, key);
+    var secs = reportSections(type, key), wEmp = type === "work" && state.workEmp ? data.employees.filter(function (x) { return x.id === state.workEmp; })[0] : null, period = reportPeriod(type, key) + (wEmp ? " · " + wEmp.firstName + " " + wEmp.lastName : "");
     var people = secs.reduce(function (a, s) { return a + s.t.rows.length; }, 0);
     var stats = '<div class="rs-stats"><div class="rs-tile"><small>کارمندان</small><b>' + faDigits(people) + '</b></div><div class="rs-tile"><small>گروه‌ها</small><b>' + faDigits(secs.length) + '</b></div><div class="rs-tile"><small>روزهای دوره</small><b>' + faDigits(reportKeysFor(type, key).length) + '</b></div><div class="rs-tile rs-tile-wide"><small>دوره‌ی گزارش</small><b>' + esc(period) + "</b></div></div>";
     var body = secs.length ? secs.map(function (s) { return groupBar(s.g, s.t.rows.length) + repTableHTML(s.t); }).join("") : '<p class="hint">گروهی برای نمایش وجود ندارد.</p>';
@@ -2966,7 +2988,8 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     var key = reportKey(), type = REPORT_TYPES.some(function (x) { return x[0] === state.reportType; }) ? state.reportType : "calendar", view = state.calView || "month", sel = state.reportGroup || "all";
     var opts = REPORT_TYPES.map(function (x) { return '<option value="' + x[0] + '"' + (x[0] === type ? " selected" : "") + ">" + x[1] + "</option>"; }).join("");
     var gopts = '<option value="all">همه گروه‌ها (هر گروه جدا)</option>' + liveGroups().map(function (g) { return '<option value="' + esc(g.id) + '"' + (sel === g.id ? " selected" : "") + ">" + esc(g.name) + "</option>"; }).join("");
-    var pick = type === "employee" ? empFieldHTML() : '<label class="field" for="rep-group"><span>گروه</span><select class="control" id="rep-group" data-report-group>' + gopts + "</select></label>";
+    var groupLbl = '<label class="field" for="rep-group"><span>گروه</span><select class="control" id="rep-group" data-report-group>' + gopts + "</select></label>";
+    var pick = type === "employee" ? empFieldHTML("reportEmp", false) : type === "work" ? groupLbl + empFieldHTML("workEmp", true) : groupLbl;
     var vopts = [["month", "ماهانه"], ["week", "هفتگی"], ["day", "روزانه"]].map(function (x) { return '<option value="' + x[0] + '"' + (view === x[0] ? " selected" : "") + ">" + x[1] + "</option>"; }).join("");
     var viewField = type === "calendar" || type === "employee" ? '<label class="field" for="cal-view"><span>نمای تقویم</span><select class="control" id="cal-view" data-cal-view>' + vopts + "</select></label>" : "";
     var timed = type === "calendar" || type === "employee";
@@ -3375,6 +3398,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     var id = el.getAttribute("data-id");
     if (a === "staff-tab") { resetStaff(); state.view = "staff"; state.staffTab = el.getAttribute("data-value"); render(); }
     if (a === "validate-close") { state.validation = null; refreshRoster(); }
+    if (a === "report-emp-pick") { state[el.getAttribute("data-key")] = id || null; render(); }
     if (a === "validate-full") { state.validation.full = !state.validation.full; refreshRoster(); }
     if (a === "swap-open") { state.swapOpen = !state.swapOpen; refreshRoster(); }
     if (a === "swap-pick") { state[el.getAttribute("data-side") === "a" ? "swapA" : "swapB"] = id; refreshRoster(); }
@@ -3483,6 +3507,11 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
   });
   app.addEventListener("input", function (ev) {
     var t = ev.target;
+    if (t.hasAttribute && t.hasAttribute("data-emp-search")) {
+      var rl = document.getElementById("emp-list-" + t.getAttribute("data-emp-search")), rq = swapNorm(t.value);
+      if (rl) { Array.prototype.forEach.call(rl.children, function (b) { b.style.display = !rq || (b.getAttribute("data-search") || "").indexOf(rq) >= 0 ? "" : "none"; }); rl.hidden = !rq; }
+      return;
+    }
     if (!t.hasAttribute || !t.hasAttribute("data-swap-search")) return;
     var list = document.getElementById("swap-list-" + t.getAttribute("data-swap-search")), q = swapNorm(t.value);
     if (!list) return;
