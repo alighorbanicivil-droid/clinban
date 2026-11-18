@@ -420,6 +420,21 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
 .swap-info { min-height: 1.4em; }
 .swap-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .swap-x { min-width: 40px; min-height: 40px; border: 1px solid var(--line); border-radius: 10px; background: transparent; color: inherit; font-size: 24px; line-height: 1; cursor: pointer; }
+.vcard { margin-top: 12px; padding: 14px; border: 1px solid var(--line); border-radius: 14px; }
+.vhead { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.vt-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+.vt { border: 1px solid var(--line); border-radius: 12px; padding: 10px; display: grid; gap: 2px; }
+.vt small { color: var(--muted); }
+.vt b { font-size: 18px; }
+.vt span { font-size: 12px; color: var(--muted); }
+.vt-ok b, .vg.vt-ok { color: var(--ok); }
+.vt-bad b, .vg.vt-bad { color: var(--danger); }
+.vsteps-title { margin: 14px 0 6px; font-size: 15px; }
+.vsteps { margin: 0; padding-inline-start: 22px; display: grid; gap: 8px; line-height: 1.9; }
+.vgroups { display: flex; flex-wrap: wrap; gap: 6px; }
+.vg { border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; font-size: 12px; }
+.vlist { margin: 0; padding-inline-start: 22px; display: grid; gap: 6px; line-height: 1.8; font-size: 13px; }
+.vfull { margin-top: 12px; width: 100%; min-height: 44px; }
 .swap-go { width: 100%; margin-top: 12px; min-height: 44px; }
 .fair-ok { color: var(--ok); }
 .fair-up { color: var(--warn); }
@@ -1041,22 +1056,22 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
         (ctx.employees || []).forEach(function (e) {
           var sid = day[e.id];
           if (!isWork(ctx, sid)) return;
-          if (!allowed(ctx, shiftOf(ctx, sid), e)) hard.push({ date: k, name: fullName(e), text: "شیفت برای گروه یا الگوی زمانی این نفر مجاز نیست", rule: "pattern" });
+          if (!allowed(ctx, shiftOf(ctx, sid), e)) hard.push({ date: k, name: fullName(e), gid: e.groupId, text: "شیفت برای گروه یا الگوی زمانی این نفر مجاز نیست", rule: "pattern" });
           violations(ctx, e, k, sid).forEach(function (v) {
-            (v.rule.mode === "hard" ? hard : soft).push({ date: k, name: fullName(e), text: v.text, rule: v.rule.id });
+            (v.rule.mode === "hard" ? hard : soft).push({ date: k, name: fullName(e), gid: e.groupId, text: v.text, rule: v.rule.id });
           });
         });
         (ctx.shifts || []).forEach(function (s) {
           if (s.mode !== "mandatory" || !(s.min > 0) || (s.days || []).indexOf(dow) < 0) return;
           var have = (ctx.employees || []).filter(function (e) { return e.active && day[e.id] === s.id; }).length;
-          if (have < s.min) short.push({ date: k, shift: s.name, n: s.min - have, rule: "shift-min" });
+          if (have < s.min) short.push({ date: k, shift: s.name, n: s.min - have, gid: (s.groups || [])[0], rule: "shift-min" });
         });
         rulesOf(ctx, "minInGroup").forEach(function (r) {
           (ctx.shifts || []).forEach(function (s) {
             if (!(r.kind === "*" || kindOf(ctx, s.id) === r.kind) || (s.days || []).indexOf(dow) < 0) return;
             if ((s.groups || [])[0] !== r.groupId) return;
             var have = (ctx.employees || []).filter(function (e) { return e.active && e.groupId === r.groupId && day[e.id] === s.id; }).length;
-            if (have < r.value) short.push({ date: k, shift: groupName(ctx, r.groupId) + " · " + s.name, n: r.value - have, rule: r.id });
+            if (have < r.value) short.push({ date: k, shift: groupName(ctx, r.groupId) + " · " + s.name, n: r.value - have, gid: r.groupId, rule: r.id });
           });
         });
       });
@@ -2010,6 +2025,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
       (lk ? '<button type="button" class="btn" data-action="roster-unlock">برداشتن قفل ماه</button>' : '<button type="button" class="btn" data-action="roster-lock">تأیید نهایی ماه</button>') + '</div>' +
       (lk ? '<p class="msg ok" role="status">این ماه تأیید نهایی شده است؛ پیشنهاد، پاک‌سازی و تغییر دستی روی آن انجام نمی‌شود.</p>' : "") +
       (msg ? '<p class="msg ' + (msgOk ? "ok" : "error") + '" role="alert">' + esc(msg) + "</p>" : "") +
+      validationHTML() +
       (state.swapOpen ? swapHTML() : "") +
       (state.rosterConfirm ? '<div class="confirm"><p>' + (state.rosterGroup && state.rosterGroup !== "all"
         ? "تمام برنامه‌ی گروه " + esc(groupName(state.rosterGroup)) + " در ماه " + faDigits(date.slice(0, 7)) + " (شامل روزهای گذشته و مرخصی‌ها) پاک خواهد شد. مطمئن هستید؟"
@@ -2574,24 +2590,78 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     }
     refreshRoster();
   }
-  // Re-checks the whole month as saved: hard and soft rule breaks, open minimums, and both fairness levels.
   function validateRoster() {
-    var date = rosterKey(), ctx = schedCtx(), keys = monthKeys(date);
+    var date = rosterKey(), ctx = schedCtx(), keys = monthKeys(date), now = new Date();
+    var scope = rosterScope(), mk = date.slice(0, 7), old = state.validation;
+    var inScope = function (x) { return !scope || x.gid === scope; };
     // Fairness is judged over three months (this month and the two before), as the spec asks.
     var chk = SchedEngine.check(ctx, keys), fr = SchedEngine.fairness(ctx, priorKeys(date).concat(keys));
-    var open = chk.short.reduce(function (n, x) { return n + x.n; }, 0);
-    var o = fr.overall;
-    var parts = [
-      chk.hard.length ? faDigits(chk.hard.length) + " نقض قانون سخت" : "بدون نقض قانون سخت",
-      faDigits(chk.soft.length) + " هشدار نرم",
-      open ? faDigits(open) + " کمبود نیرو" : "بدون کمبود نیرو",
-      "عدالت کلی سه ماهه: انحراف " + faDigits(Math.round(o.pct * 100)) + "٪ (از " + faDigits(Math.round(o.min)) + " تا " + faDigits(Math.round(o.max)) + " ساعت)"
-    ];
-    fr.groups.forEach(function (g) { parts.push("گروه «" + g.name + "»: انحراف " + faDigits(Math.round(g.stat.pct * 100)) + "٪"); });
-    if (chk.hard.length) parts.push("نمونه: " + chk.hard.slice(0, 3).map(function (x) { return faDigits(x.date) + " · " + x.name + ": " + x.text; }).join("؛"));
-    state.rosterOk = !chk.hard.length;
-    state.rosterMsg = parts.join("؛ ") + ".";
+    var groups = fr.groups.map(function (g) { return { gid: g.gid, name: g.name, n: g.stat.n, min: g.stat.min, max: g.stat.max, avg: g.stat.avg, pct: g.stat.pct }; });
+    var overall = fr.overall;
+    if (scope) overall = groups.filter(function (g) { return g.gid === scope; })[0] || { n: 0, min: 0, max: 0, avg: 0, pct: 0 };
+    state.validation = {
+      month: mk, at: pad2(now.getHours()) + ":" + pad2(now.getMinutes()),
+      scopeName: scope ? groupName(scope) : null,
+      hard: chk.hard.filter(inScope), soft: chk.soft.filter(inScope), short: chk.short.filter(inScope),
+      overall: overall, groups: groups.filter(function (g) { return !scope || g.gid === scope; }),
+      full: !!(old && old.full && old.month === mk)
+    };
+    state.rosterMsg = ""; state.rosterOk = false;
     refreshRoster();
+  }
+  // Result card of the last check for the selected group (or all groups): summary, steps, interpretation, full report.
+  function validationHTML() {
+    var v = state.validation;
+    if (!v || v.month !== rosterKey().slice(0, 7)) return "";
+    var o = v.overall, overallOk = Math.abs(o.pct || 0) <= FAIR_TOL, open = v.short.reduce(function (n, x) { return n + x.n; }, 0);
+    var bad = v.groups.filter(function (g) { return Math.abs(g.pct) > FAIR_TOL; });
+    var scopeTxt = v.scopeName ? "گروه «" + v.scopeName + "»" : "همه‌ی گروه‌ها";
+    var tile = function (ok, label, value, note) {
+      return '<div class="vt ' + (ok ? "vt-ok" : "vt-bad") + '"><small>' + label + "</small><b>" + value + "</b><span>" + note + "</span></div>";
+    };
+    var tiles = '<div class="vt-grid">' +
+      tile(!v.hard.length, "قانون سخت", v.hard.length ? faDigits(v.hard.length) + " نقض" : "سالم", v.hard.length ? "باید رفع شود" : "هیچ نقضی نیست") +
+      tile(!v.soft.length, "هشدار نرم", faDigits(v.soft.length), v.soft.length ? "مرور کنید؛ مجاز است" : "موردی نیست") +
+      tile(!open, "کمبود نیرو", faDigits(open) + " نفر", open ? "باید پر شود" : "همه‌ی شیفت‌ها پر است") +
+      tile(overallOk, "عدالت سه‌ماهه", faDigits(Math.round(Math.abs(o.pct || 0) * 100)) + "٪", (v.scopeName ? "گروه" : "کل") + " · ساعت از " + faDigits(Math.round(o.min)) + " تا " + faDigits(Math.round(o.max))) +
+      "</div>";
+    var interp = [
+      "بررسی برای " + scopeTxt + " انجام شد.",
+      v.hard.length ? "قانون سخت نقض شده است؛ تا رفع این موارد، برنامه قابل اجرا نیست." : "قانون سخت نقض نشده است؛ برنامه از نظر قوانین الزامی قابل اجراست.",
+      open ? "کمبود " + faDigits(open) + " نفر یعنی در این تعداد شیفت، نیروی کافی تعیین نشده است." : "همه‌ی شیفت‌های لازم پر است.",
+      v.soft.length ? faDigits(v.soft.length) + " هشدار نرم وجود دارد. این موارد مجازند، ولی کیفیت برنامه را پایین می‌آورند." : "هشدار نرمی وجود ندارد.",
+      overallOk ? "عدالت ساعتی در محدوده‌ی مجاز است." : "عدالت ساعتی خارج از محدوده است؛ بین بیشترین و کمترین ساعت حدود " + faDigits(Math.round(o.max - o.min)) + " ساعت فاصله است."
+    ];
+    var steps = [];
+    if (v.hard.length) steps.push("اول نقض‌های قانون سخت را رفع کنید. با تغییر همان خانه یا جابجایی شیفت، این موارد درست می‌شوند.");
+    if (open) steps.push("کمبود نیرو را پر کنید: «پیشنهاد عادلانه» را برای همین گروه بزنید، یا خانه‌ها را دستی انتخاب کنید.");
+    if (v.soft.length) steps.push("هشدارهای نرم (خانه‌های نارنجی) را مرور کنید و اگر امکانش هست رفع کنید.");
+    if (bad.length) steps.push("گروه‌های با انحراف بیش از ۱۵٪ را بررسی کنید: " + bad.map(function (g) { return "«" + g.name + "» (" + faDigits(Math.round(Math.abs(g.pct) * 100)) + "٪)"; }).join("، ") + ". بعد از پر شدن کمبودها دوباره اعتبارسنجی کنید.");
+    if (!v.hard.length && !open && !overallOk) steps.push("عدالت سه‌ماهه بالاست. در تب «عدالت» ببینید کدام افراد ساعت خیلی کم یا خیلی زیاد دارند.");
+    if (!steps.length) steps.push("برنامه از همه‌ی بررسی‌ها عبور کرده است. اگر آماده است، «تأیید نهایی ماه» را بزنید.");
+    var full = "";
+    if (v.full) {
+      var li = function (arr) { return arr.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join(""); };
+      full = '<h4 class="vsteps-title">جزئیات قانون سخت (' + faDigits(v.hard.length) + ")</h4>" +
+        (v.hard.length ? '<ul class="vlist">' + li(v.hard.map(function (x) { return faDigits(x.date) + " · " + x.name + ": " + x.text; })) + "</ul>" : '<p class="hint">موردی نیست.</p>') +
+        '<h4 class="vsteps-title">هشدارهای نرم (' + faDigits(v.soft.length) + ")</h4>" +
+        (v.soft.length ? '<ul class="vlist">' + li(v.soft.map(function (x) { return faDigits(x.date) + " · " + x.name + ": " + x.text; })) + "</ul>" : '<p class="hint">موردی نیست.</p>') +
+        '<h4 class="vsteps-title">کمبودها (' + faDigits(open) + " نفر)</h4>" +
+        (v.short.length ? '<ul class="vlist">' + li(v.short.map(function (x) { return faDigits(x.date) + " · " + x.shift + " · کمبود " + faDigits(x.n); })) + "</ul>" : '<p class="hint">موردی نیست.</p>') +
+        '<h4 class="vsteps-title">عدالت به تفکیک گروه</h4><div class="fair-wrap"><table class="fair-table"><thead><tr><th>گروه</th><th>نفر</th><th>کمترین</th><th>بیشترین</th><th>میانگین</th><th>انحراف</th><th>وضعیت</th></tr></thead><tbody>' +
+        v.groups.map(function (g) {
+          var ok = Math.abs(g.pct) <= FAIR_TOL;
+          return "<tr><th>" + esc(g.name) + "</th><td>" + faDigits(g.n) + "</td><td>" + faDigits(Math.round(g.min)) + "</td><td>" + faDigits(Math.round(g.max)) + "</td><td>" + faDigits(Math.round(g.avg)) + "</td><td>" + faDigits(Math.round(Math.abs(g.pct) * 100)) + '٪</td><td class="' + (ok ? "fair-ok" : "fair-up") + '">' + (ok ? "در محدوده" : "نیاز به بررسی") + "</td></tr>";
+        }).join("") + "</tbody></table></div>";
+    }
+    return '<div class="vcard" role="status"><div class="vhead"><div><h3 class="fair-title">نتیجه‌ی اعتبارسنجی ماه ' + faDigits(v.month) + " · " + esc(scopeTxt) + '</h3>' +
+      '<small class="hint">ساعت ' + faDigits(v.at) + " · بعد از هر تغییر دوباره اعتبارسنجی کنید</small></div>" +
+      '<button type="button" class="swap-x" data-action="validate-close" aria-label="بستن نتیجه">×</button></div>' +
+      tiles +
+      '<h4 class="vsteps-title">تفسیر</h4><ul class="vlist">' + interp.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + "</ul>" +
+      '<h4 class="vsteps-title">نقشه‌ی راه</h4><ol class="vsteps">' + steps.map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol>" +
+      '<button type="button" class="btn ghost vfull" data-action="validate-full">' + (v.full ? "بستن گزارش کامل" : "گزارش کامل") + "</button>" +
+      full + "</div>";
   }
 
   function hoursBadge(e, mins) {
@@ -3304,6 +3374,8 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
   function staffAction(a, el) {
     var id = el.getAttribute("data-id");
     if (a === "staff-tab") { resetStaff(); state.view = "staff"; state.staffTab = el.getAttribute("data-value"); render(); }
+    if (a === "validate-close") { state.validation = null; refreshRoster(); }
+    if (a === "validate-full") { state.validation.full = !state.validation.full; refreshRoster(); }
     if (a === "swap-open") { state.swapOpen = !state.swapOpen; refreshRoster(); }
     if (a === "swap-pick") { state[el.getAttribute("data-side") === "a" ? "swapA" : "swapB"] = id; refreshRoster(); }
     if (a === "swap-run") { swapRun(); }
