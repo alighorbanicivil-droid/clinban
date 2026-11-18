@@ -406,6 +406,21 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
 .fair-table thead th { color: var(--muted); font-weight: 600; }
 .fair-table tbody th { text-align: right; font-weight: 600; }
 .fair-table tbody th small { display: block; font-size: 11px; color: var(--muted); font-weight: 400; }
+.swap-box { margin-top: 12px; padding: 12px; border: 1px solid var(--line); border-radius: 14px; }
+.swap-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; margin-top: 10px; }
+@media (min-width: 640px) { .swap-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.swap-side { display: grid; gap: 8px; align-content: start; min-width: 0; }
+.swap-side .field { width: 100%; min-width: 0; }
+.swap-side .control, .swap-side .datebtn { width: 100%; min-height: 44px; box-sizing: border-box; }
+.swap-list[hidden] { display: none !important; }
+.swap-list { display: grid; max-height: 200px; overflow-y: auto; border: 1px solid var(--line); border-radius: 12px; }
+.swap-opt { display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%; padding: 10px 12px; border: 0; border-bottom: 1px solid var(--line); background: transparent; color: inherit; font: inherit; text-align: right; cursor: pointer; }
+.swap-opt small { color: var(--muted); font-size: 11px; }
+.swap-opt.is-on { font-weight: 700; }
+.swap-info { min-height: 1.4em; }
+.swap-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.swap-x { min-width: 40px; min-height: 40px; border: 1px solid var(--line); border-radius: 10px; background: transparent; color: inherit; font-size: 24px; line-height: 1; cursor: pointer; }
+.swap-go { width: 100%; margin-top: 12px; min-height: 44px; }
 .fair-ok { color: var(--ok); }
 .fair-up { color: var(--warn); }
 .fair-down { color: var(--danger); }
@@ -1386,7 +1401,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
       pwField("old-pw", "رمز فعلی", "current-password", false) + pwField("new-pw", "رمز جدید (حداقل ۸ کاراکتر)", "new-password", true) + pwField("new-pw2", "تکرار رمز جدید", "new-password", false) +
       '<p class="msg" id="cp-msg" role="status" hidden></p><button class="btn" type="submit">ثبت رمز جدید</button></form></section>' +
       '<div class="stack">' + (inViewer ? "" : '<section class="card"><h2>پوسته</h2><div class="seg">' + seg("system", "خودکار") + seg("light", "روشن") + seg("dark", "تیره") + "</div></section>") + auditHTML() +
-      '<section class="card"><h2>درباره</h2><dl class="kv"><div><dt>نسخه</dt><dd class="num">' + fa("0.3") + '</dd></div><div><dt>محل ذخیره</dt><dd>همین مرورگر</dd></div><div><dt>همگام‌سازی</dt><dd>ندارد؛ انتقال با فایل پشتیبان</dd></div></dl></section></div></div>';
+      '<section class="card"><h2>درباره</h2><dl class="kv"><div><dt>نسخه</dt><dd class="num">' + fa("0.5") + '</dd></div><div><dt>محل ذخیره</dt><dd>همین مرورگر</dd></div><div><dt>همگام‌سازی</dt><dd>ندارد؛ انتقال با فایل پشتیبان</dd></div></dl></section></div></div>';
   }
 
   function render() {
@@ -1576,6 +1591,12 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     if (tx) { tx.textContent = v ? friendlyJ(v) : "انتخاب تاریخ"; tx.className = "datebtn-text" + (v ? "" : " empty"); }
     if (id === "roster-date") { state.rosterDate = v || null; refreshRoster("roster-date-btn"); }
     if (id === "report-date") { state.reportDate = v || null; render(); }
+    if (id === "swap-date-a" || id === "swap-date-b") { state.swapDateA = document.getElementById("swap-date-a").value || null; state.swapDateB = document.getElementById("swap-date-b").value || null; refreshRoster(); }
+    if (id === "fair-from" || id === "fair-to") {
+      state.fairFrom = document.getElementById("fair-from").value || null;
+      state.fairTo = document.getElementById("fair-to").value || null;
+      render();
+    }
   }
   function pickerRoot() { return document.getElementById("picker-root"); }
   function openPicker(targetId, clearable, opener) {
@@ -1984,10 +2005,12 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
       '<label class="field" for="roster-group"><span>برنامه گروه</span><select class="control" id="roster-group" data-roster-group>' + rgopts + "</select></label>" +
       '<button type="button" class="btn" data-action="fair-month"' + (lk ? " disabled" : "") + '>' + (rosterScope() ? "پیشنهاد عادلانه برای " + esc(groupName(rosterScope())) : "پیشنهاد عادلانه برای کل ماه") + '</button>' +
       '<button type="button" class="btn danger" data-action="roster-clear"' + (lk ? " disabled" : "") + '>پاک کردن برنامه</button>' +
+      (state.swapOpen ? "" : '<button type="button" class="btn ghost" data-action="swap-open"' + (lk ? " disabled" : "") + '>جابجایی شیفت</button>') +
       '<button type="button" class="btn ghost" data-action="roster-validate">اعتبارسنجی برنامه</button>' +
       (lk ? '<button type="button" class="btn" data-action="roster-unlock">برداشتن قفل ماه</button>' : '<button type="button" class="btn" data-action="roster-lock">تأیید نهایی ماه</button>') + '</div>' +
       (lk ? '<p class="msg ok" role="status">این ماه تأیید نهایی شده است؛ پیشنهاد، پاک‌سازی و تغییر دستی روی آن انجام نمی‌شود.</p>' : "") +
       (msg ? '<p class="msg ' + (msgOk ? "ok" : "error") + '" role="alert">' + esc(msg) + "</p>" : "") +
+      (state.swapOpen ? swapHTML() : "") +
       (state.rosterConfirm ? '<div class="confirm"><p>' + (state.rosterGroup && state.rosterGroup !== "all"
         ? "تمام برنامه‌ی گروه " + esc(groupName(state.rosterGroup)) + " در ماه " + faDigits(date.slice(0, 7)) + " (شامل روزهای گذشته و مرخصی‌ها) پاک خواهد شد. مطمئن هستید؟"
         : "هشدار: کل برنامه‌ی ماه " + faDigits(date.slice(0, 7)) + " برای همه‌ی گروه‌ها (شامل روزهای گذشته و مرخصی‌ها) پاک خواهد شد. مطمئن هستید؟") +
@@ -2083,6 +2106,72 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
       await logAudit("تخصیص شیفت", "کارمند", e.firstName + " " + e.lastName + " ← " + (key === LEAVE ? "مرخصی" : shiftName(key)) + " (" + faDigits(date) + ")");
     } catch (err) { data.assignments = (await kvGet(K_ASSIGN)) || {}; }
     refreshRoster(focus);
+  }
+
+  // ---------- shift swap: each employee has its own day ----------
+  function swapCellLabel(date, id) {
+    var v = assignOf(date, id);
+    return v === LEAVE ? "مرخصی" : isWork(v) ? shiftName(v) : "بدون شیفت";
+  }
+  function swapNorm(s) { return normDigits(String(s || "")).toLowerCase().replace(/[يى]/g, "ی").replace(/ك/g, "ک").replace(/\s+/g, " ").trim(); }
+  // One side of the swap: searchable employee picker, own day, and the shift of that day.
+  function swapPerson(side, sel, date, emps) {
+    var cur = emps.filter(function (e) { return e.id === sel; })[0];
+    var label = side === "a" ? "کارمند اول" : "کارمند دوم";
+    var list = emps.map(function (e) {
+      return '<button type="button" class="swap-opt' + (cur && e.id === cur.id ? " is-on" : "") + '" data-action="swap-pick" data-side="' + side + '" data-id="' + esc(e.id) + '" data-search="' + esc(swapNorm(e.firstName + " " + e.lastName + " " + groupName(e.groupId))) + '">' +
+        "<span>" + esc(e.firstName + " " + e.lastName) + "</span><small>" + esc(groupName(e.groupId)) + "</small></button>";
+    }).join("");
+    return '<div class="swap-side"><label class="field" for="swap-q-' + side + '"><span>' + label + '</span>' +
+      '<input class="control" id="swap-q-' + side + '" data-swap-search="' + side + '" type="search" autocomplete="off" placeholder="جستجوی نام یا گروه" value="' + esc(cur ? cur.firstName + " " + cur.lastName : "") + '"></label>' +
+      '<div class="swap-list" id="swap-list-' + side + '" hidden>' + list + "</div>" +
+      dateFieldHTML("swap-date-" + side, "روز شیفت " + label, date, {}) +
+      '<small class="hint swap-info">' + (cur ? "شیفت این روز: " + esc(swapCellLabel(date, cur.id)) : "کارمند را انتخاب کنید") + "</small></div>";
+  }
+  function swapHTML() {
+    var da = state.swapDateA || rosterKey(), db = state.swapDateB || da;
+    var emps = liveEmployees().filter(function (e) { return e.active; }).sort(byName);
+    return '<div class="swap-box"><div class="swap-head"><h3 class="fair-title">جابجایی شیفت دو کارمند</h3><button type="button" class="swap-x" data-action="swap-open" aria-label="بستن کارت جابجایی">×</button></div>' +
+      '<p class="hint">برای هر کارمند، نام و روز شیفتش را مشخص کنید. شیفت آن روز کارمند اول با شیفت آن روز کارمند دوم عوض می‌شود. قوانین سخت برای هر دو بررسی می‌شود.</p>' +
+      '<div class="swap-grid">' + swapPerson("a", state.swapA || "", da, emps) + swapPerson("b", state.swapB || "", db, emps) + "</div>" +
+      '<button type="button" class="btn swap-go" data-action="swap-run">جابجا کن</button></div>';
+  }
+  async function swapRun() {
+    var da = state.swapDateA || rosterKey(), db = state.swapDateB || da, a = state.swapA, b = state.swapB, ctx = schedCtx();
+    var fail = function (t) { state.rosterOk = false; state.rosterMsg = t; refreshRoster(); };
+    var ea = data.employees.find(function (x) { return x.id === a; }), eb = data.employees.find(function (x) { return x.id === b; });
+    if (!ea || !eb || a === b) return fail("دو کارمند متفاوت را انتخاب کنید.");
+    if (monthLocked(da) || monthLocked(db)) return fail("ماه یکی از این دو روز تأیید نهایی شده است؛ جابجایی ممکن نیست.");
+    var va = assignOf(da, a), vb = assignOf(db, b);
+    if (!va && !vb) return fail("هیچ‌کدام از این دو نفر در آن روز شیفتی ندارند.");
+    if (va === vb && da === db) return fail("شیفت این دو نفر در این روز یکسان است؛ جابجایی لازم نیست.");
+    var hasHistory = SchedEngine.frozen(ctx, da, a) || SchedEngine.frozen(ctx, db, b);
+    var mA = data.assignments[da] || (data.assignments[da] = {}), mB = data.assignments[db] || (data.assignments[db] = {});
+    var put = function (m, id, v) { if (v) m[id] = v; else delete m[id]; };
+    var clean = function () { [da, db].forEach(function (d) { if (data.assignments[d] && !Object.keys(data.assignments[d]).length) delete data.assignments[d]; }); };
+    // A gets B's shift on A's day; B gets A's shift on B's day.
+    put(mA, a, vb); put(mB, b, va);
+    var bad = [];
+    [[ea, da, vb], [eb, db, va]].forEach(function (p) {
+      var e = p[0], d = p[1], v = p[2], s = isWork(v) ? shiftById(v) : null, who = e.firstName + " " + e.lastName;
+      if (!s) return;
+      if (!allowedFor(s, e)) { bad.push(who + ": «" + s.name + "» مجاز نیست"); return; }
+      if (SchedEngine.exemptOf(e, d, kindOf(v))) { bad.push(who + ": در این بازه از این نوع شیفت معاف است"); return; }
+      hardOnly(violationsAt(e, d, v)).forEach(function (x) { bad.push(who + ": " + x.text); });
+    });
+    if (bad.length) {
+      put(mA, a, va); put(mB, b, vb); clean();
+      return fail("جابجایی انجام نشد: " + bad.join("، ") + ".");
+    }
+    try {
+      await kvSet(K_ASSIGN, data.assignments);
+      await logAudit("جابجایی شیفت" + (hasHistory ? " (روز ثبت‌شده)" : ""), "کارمند", ea.firstName + " " + ea.lastName + " (" + faDigits(da) + ") ↔ " + eb.firstName + " " + eb.lastName + " (" + faDigits(db) + ")");
+      state.rosterOk = true; state.rosterMsg = "جابجایی شیفت " + ea.firstName + " و " + eb.firstName + " انجام شد.";
+    } catch (err) {
+      data.assignments = (await kvGet(K_ASSIGN)) || {};
+      state.rosterOk = false; state.rosterMsg = "ذخیره‌سازی ناموفق بود؛ جابجایی انجام نشد.";
+    }
+    refreshRoster();
   }
 
   // ---------- shift types, time spans and group patterns ----------
@@ -2524,8 +2613,21 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     return out;
   }
   function reportKey() { return state.reportDate || rosterKey(); }
-  function reportKeysFor(type, key) { return type === "weekly" ? weekKeys(key) : monthKeys(key); }
+  // Fairness period: a chosen "from – to" range. Without a valid range it is the whole month of the roster date.
+  function fairRange() {
+    var m = monthKeys(rosterKey()), from = state.fairFrom && parseJDate(state.fairFrom), to = state.fairTo && parseJDate(state.fairTo);
+    if (!from || !to || dayIdx(to) < dayIdx(from)) return { from: m[0], to: m[m.length - 1], keys: m, custom: false };
+    var keys = [], k = from, n = dayIdx(to) - dayIdx(from) + 1, i;
+    for (i = 0; i < n; i++) { keys.push(k); k = keyDelta(k, 1); }
+    return { from: from, to: to, keys: keys, custom: true };
+  }
+  function fairDatesHTML() {
+    var R = fairRange();
+    return '<div class="roster-date">' + dateFieldHTML("fair-from", "از تاریخ", R.from, {}) + '</div><div class="roster-date">' + dateFieldHTML("fair-to", "تا تاریخ", R.to, {}) + "</div>";
+  }
+  function reportKeysFor(type, key) { return type === "weekly" ? weekKeys(key) : type === "fair" ? fairRange().keys : monthKeys(key); }
   function reportPeriod(type, key) {
+    if (type === "fair") { var R = fairRange(); return friendlyJ(R.from) + " تا " + friendlyJ(R.to); }
     if (type === "weekly") { var w = weekKeys(key); return friendlyJ(w[0]) + " تا " + friendlyJ(w[6]); }
     var a = key.split("/").map(Number);
     return "ماه " + PMONTHS[a[1] - 1] + " " + faDigits(a[0]);
@@ -2800,7 +2902,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     var timed = type === "calendar" || type === "employee";
     var dateLabel = timed && view === "day" ? "روز گزارش" : timed && view === "week" ? "هفته (هر روزی از هفته)" : "ماه گزارش (هر روزی از ماه)";
     return '<div class="rep-bar"><label class="field" for="rep-type"><span>نوع گزارش</span><select class="control" id="rep-type" data-report-type>' + opts + "</select></label>" + pick + viewField +
-      '<div class="roster-date">' + dateFieldHTML("report-date", dateLabel, key, {}) + "</div>" +
+      (type === "fair" ? fairDatesHTML() : '<div class="roster-date">' + dateFieldHTML("report-date", dateLabel, key, {}) + "</div>") +
       '<div class="rep-actions"><button type="button" class="btn" data-action="report-print">PDF و چاپ</button><button type="button" class="btn ghost" data-action="report-xls">Excel</button></div></div>' +
       '<p class="hint">گزارش‌ها رسمی و قابل چاپ هستند. برای PDF در پنجره‌ی چاپ گزینه‌ی «ذخیره به‌صورت PDF» را انتخاب کنید.</p>' +
       '<div class="rs-wrap">' + reportSheetHTML(type, key) + "</div>";
@@ -2820,7 +2922,8 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
   function reportFileName(type, key, emp) {
     var safeType = REPORT_TYPES.some(function (x) { return x[0] === type; }) ? type : "calendar";
     var who = safeType === "employee" && emp ? "-" + latinNameOf(emp) : "";
-    return "clinic-" + safeType + who + "-" + normDigits(key).replace(/[^0-9]+/g, "-").replace(/^-|-$/g, "");
+    var when = safeType === "fair" ? normDigits(fairRange().from) + "-" + normDigits(fairRange().to) : normDigits(key);
+    return "clinic-" + safeType + who + "-" + when.replace(/[^0-9]+/g, "-").replace(/^-|-$/g, "");
   }
   function printReport() {
     var key = reportKey(), type = REPORT_TYPES.some(function (x) { return x[0] === state.reportType; }) ? state.reportType : "calendar";
@@ -2829,7 +2932,8 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     window.print();
     setTimeout(function () { document.title = prev; }, 1000);
   }
-  function downloadXls() {
+  // Builds the report as an Excel file (returned as a File, so it can be downloaded or shared).
+  function reportXlsFile() {
     var key = reportKey(), type = state.reportType || "plan", name = state.clinicName || "کلین‌بان", title = reportTitle(type);
     var cell = function (c, tag) { return "<" + tag + ">" + esc(c) + "</" + tag + ">"; };
     var parts = ["<tr>" + cell(name, "th") + "</tr>", "<tr>" + cell(title + " · " + reportPeriod(type, key), "th") + "</tr>"];
@@ -2839,13 +2943,17 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     });
     var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"></head><body dir="rtl"><table>' + parts.join("") + "</table></body></html>";
     var blob = new Blob(["﻿" + html], { type: "application/vnd.ms-excel;charset=utf-8" });
-    var a = document.createElement("a"), url = URL.createObjectURL(blob);
-    a.href = url; a.download = reportFileName(state.reportType || "plan", key, employeeKey()) + ".xls";
+    return new File([blob], reportFileName(state.reportType || "plan", key, employeeKey()) + ".xls", { type: "application/vnd.ms-excel" });
+  }
+  function downloadXls() {
+    var file = reportXlsFile(), url = URL.createObjectURL(file);
+    var a = document.createElement("a");
+    a.href = url; a.download = file.name;
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   }
   function fairHTML() {
-    var key = rosterKey(), st = fairStats(monthKeys(key)), sh = liveShifts();
+    var R = fairRange(), st = fairStats(R.keys), sh = liveShifts();
     var allEmps = liveEmployees().filter(function (e) { return e.active; });
     var agg = {};
     allEmps.forEach(function (e) { if (!shareOf(e)) return; var g = agg[e.groupId] || (agg[e.groupId] = { sum: 0, n: 0 }); g.sum += st[e.id].mins; g.n++; });
@@ -2870,11 +2978,12 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
         '<div class="fair-wrap"><table class="fair-table"><thead>' + head + "</thead><tbody>" + emps.map(rowOf).join("") + "</tbody></table></div>";
     }).join("");
     var gopts = '<option value="all">همه گروه‌ها</option>' + liveGroups().map(function (g) { return '<option value="' + esc(g.id) + '"' + (sel === g.id ? " selected" : "") + ">" + esc(g.name) + "</option>"; }).join("");
-    return '<section class="card"><div class="fair-actions"><h2 class="fair-title">عدالت در ماه ' + faDigits(key.slice(0, 7)) + '</h2>' +
+    return '<section class="card"><div class="fair-actions roster-tools">' + fairDatesHTML() + '<button type="button" class="btn ghost" data-action="fair-reset">کل ماه جاری</button></div>' +
+      '<div class="fair-actions"><h2 class="fair-title">عدالت از ' + esc(friendlyJ(R.from)) + ' تا ' + esc(friendlyJ(R.to)) + '</h2>' +
       '<label class="field" for="fair-group"><span>گروه</span><select class="control" id="fair-group" data-fair-group>' + gopts + "</select></label>" +
       '<button type="button" class="btn" data-action="fair-print">گزارش چاپی عدالت</button>' +
       '<button type="button" class="btn ghost" data-action="staff-tab" data-value="roster">تغییر ماه از برنامه ماهانه</button></div>' +
-      '<p class="hint">تعداد هر نوع شیفت، ساعت کل و روزهای تعطیل کاری هر نفر در این ماه. «انحراف» فاصله‌ی ساعت از میانگین گروه است؛ بیش از ±' + faDigits(Math.round(FAIR_TOL * 100)) + '٪ نامتعادل است.</p>' +
+      '<p class="hint">تعداد هر نوع شیفت، ساعت کل و روزهای تعطیل کاری هر نفر در این بازه. «انحراف» فاصله‌ی ساعت از میانگین گروه است؛ بیش از ±' + faDigits(Math.round(FAIR_TOL * 100)) + '٪ نامتعادل است.</p>' +
       (body || '<p class="hint">کارمند فعال یا شیفت تعریف‌شده‌ای نیست.</p>') + "</section>";
   }
 
@@ -3195,7 +3304,11 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
   function staffAction(a, el) {
     var id = el.getAttribute("data-id");
     if (a === "staff-tab") { resetStaff(); state.view = "staff"; state.staffTab = el.getAttribute("data-value"); render(); }
-    if (a === "fair-print") { state.reportType = "fair"; state.reportGroup = state.fairGroup || "all"; state.reportDate = rosterKey(); state.view = "staff"; state.staffTab = "reports"; render(); }
+    if (a === "swap-open") { state.swapOpen = !state.swapOpen; refreshRoster(); }
+    if (a === "swap-pick") { state[el.getAttribute("data-side") === "a" ? "swapA" : "swapB"] = id; refreshRoster(); }
+    if (a === "swap-run") { swapRun(); }
+    if (a === "fair-reset") { state.fairFrom = null; state.fairTo = null; render(); }
+    else if (a === "fair-print") { state.reportType = "fair"; state.reportGroup = state.fairGroup || "all"; state.reportDate = rosterKey(); state.view = "staff"; state.staffTab = "reports"; render(); }
     else if (a === "emp-new") { resetStaff(); state.view = "staff"; state.staffMode = "form"; state.formPhoto = null; render(); window.scrollTo(0, 0); }
     else if (a === "emp-edit") {
       var e = data.employees.find(function (x) { return x.id === id; }); if (!e) return true;
@@ -3296,6 +3409,16 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     if (fk) { state.filter[fk] = tg.value; refreshEmpList(); }
     if ((tg.id === "e-first" || tg.id === "e-last") && !state.formPhoto) refreshAvatar();
   });
+  app.addEventListener("input", function (ev) {
+    var t = ev.target;
+    if (!t.hasAttribute || !t.hasAttribute("data-swap-search")) return;
+    var list = document.getElementById("swap-list-" + t.getAttribute("data-swap-search")), q = swapNorm(t.value);
+    if (!list) return;
+    Array.prototype.forEach.call(list.children, function (b) {
+      b.style.display = !q || (b.getAttribute("data-search") || "").indexOf(q) >= 0 ? "" : "none";
+    });
+    list.hidden = !q;
+  });
   app.addEventListener("change", function (ev) {
     if (ev.target.getAttribute && ev.target.getAttribute("data-rule")) ruleChange(ev.target.getAttribute("data-rule"), ev.target.getAttribute("data-field"), ev.target);
     if (ev.target.hasAttribute && ev.target.hasAttribute("data-roster-group")) { state.rosterGroup = ev.target.value; refreshRoster(); }
@@ -3304,6 +3427,7 @@ textarea.control.plain { direction: rtl; text-align: start; font-family: var(--f
     else if (ev.target.hasAttribute && ev.target.hasAttribute("data-fair-group")) { state.fairGroup = ev.target.value; render(); }
     else if (ev.target.hasAttribute && ev.target.hasAttribute("data-report-emp")) { state.reportEmp = ev.target.value; render(); }
     else if (ev.target.hasAttribute && ev.target.hasAttribute("data-cal-view")) { state.calView = ev.target.value; render(); }
+    else if (ev.target.hasAttribute && ev.target.hasAttribute("data-swap")) { state[ev.target.getAttribute("data-swap") === "a" ? "swapA" : "swapB"] = ev.target.value || null; refreshRoster(); }
     else if (ev.target.getAttribute && ev.target.getAttribute("data-roster-emp")) rosterSet(ev.target.getAttribute("data-roster-emp"), ev.target.getAttribute("data-roster-date"), ev.target.value);
     if (ev.target.getAttribute && ev.target.getAttribute("data-pattern-group")) togglePattern(ev.target.getAttribute("data-pattern-group"), ev.target.getAttribute("data-pattern-shift"), ev.target.checked, ev.target.id);
     if (ev.target.id === "e-group") { var dl = $("#e-titles"); if (dl) dl.innerHTML = titlesOptions(ev.target.value); }
